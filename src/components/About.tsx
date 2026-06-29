@@ -1,106 +1,58 @@
 import { motion } from 'motion/react';
 import { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Environment, Float, PresentationControls, Text } from '@react-three/drei';
+import { Environment, Float, PresentationControls } from '@react-three/drei';
 import * as THREE from 'three';
 
-function Logo3D() {
-  const groupRef = useRef<THREE.Group>(null);
+function PremiumFabric() {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const geomRef = useRef<THREE.PlaneGeometry>(null);
   
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
-    if (groupRef.current) {
-      // Elegant, subtle rotation
-      groupRef.current.rotation.y = Math.sin(time * 0.4) * 0.15;
-      groupRef.current.rotation.x = Math.sin(time * 0.3) * 0.1;
-      // Gentle floating
-      groupRef.current.position.y = Math.sin(time * 0.5) * 0.1;
+    if (meshRef.current) {
+      // Elegant slow rotation
+      meshRef.current.rotation.y = Math.sin(time * 0.15) * 0.2;
+      meshRef.current.rotation.z = Math.sin(time * 0.1) * 0.1;
+    }
+    
+    // Animate vertices for a flowing fabric effect
+    if (geomRef.current) {
+      const position = geomRef.current.attributes.position;
+      for (let i = 0; i < position.count; i++) {
+        const x = position.getX(i);
+        const y = position.getY(i);
+        // Create smooth, elegant waves
+        const z = Math.sin(x * 1.2 + time * 1.5) * 0.25 + 
+                  Math.cos(y * 1.2 + time * 1.2) * 0.25;
+        position.setZ(i, z);
+      }
+      position.needsUpdate = true;
+      geomRef.current.computeVertexNormals();
     }
   });
 
-  const fontUrl = 'https://cdn.jsdelivr.net/npm/@fontsource/playfair-display@5.0.8/files/playfair-display-latin-400-normal.woff';
-  const italicFontUrl = 'https://cdn.jsdelivr.net/npm/@fontsource/playfair-display@5.0.8/files/playfair-display-latin-400-italic.woff';
-  
   return (
-    <Float speed={2} rotationIntensity={0.1} floatIntensity={0.2}>
-      <group ref={groupRef} scale={1.3}>
-        {/* Soft background glow */}
-        <mesh position={[0, 0, -0.5]}>
-          <planeGeometry args={[6, 6]} />
-          <meshBasicMaterial color="#DB9CA6" transparent opacity={0.15} blending={THREE.AdditiveBlending} depthWrite={false} />
-        </mesh>
-
-        <Text 
-          font={italicFontUrl} 
-          position={[-0.3, 0.75, 0]} 
-          fontSize={1.6} 
-          color="#B86B77"
-        >
-          E
-          <meshPhysicalMaterial 
-            color="#DB9CA6"
-            metalness={0.9}
-            roughness={0.15}
-            clearcoat={1}
-            clearcoatRoughness={0.1}
-          />
-        </Text>
-        <Text 
-          font={fontUrl} 
-          position={[0.3, 0.45, 0.1]} 
-          fontSize={1.4} 
-          color="#B86B77"
-        >
-          W
-          <meshPhysicalMaterial 
-            color="#DB9CA6"
-            metalness={0.9}
-            roughness={0.15}
-            clearcoat={1}
-            clearcoatRoughness={0.1}
-          />
-        </Text>
-        <group position={[0, -0.6, 0.2]}>
-          <Text 
-            font={italicFontUrl} 
-            position={[-0.9, 0, 0]} 
-            fontSize={1.2} 
-            color="#B86B77"
-          >
-            E
-            <meshPhysicalMaterial 
-              color="#DB9CA6"
-              metalness={0.9}
-              roughness={0.15}
-              clearcoat={1}
-              clearcoatRoughness={0.1}
-            />
-          </Text>
-          <Text 
-            font={fontUrl} 
-            position={[0.55, 0, 0]} 
-            fontSize={1.2} 
-            letterSpacing={0.12}
-            color="#B86B77"
-          >
-            liswa
-            <meshPhysicalMaterial 
-              color="#DB9CA6"
-              metalness={0.9}
-              roughness={0.15}
-              clearcoat={1}
-              clearcoatRoughness={0.1}
-            />
-          </Text>
-        </group>
-      </group>
+    <Float speed={1.5} rotationIntensity={0.5} floatIntensity={0.6}>
+      <mesh ref={meshRef} position={[0, 0, 0]} rotation={[-Math.PI / 5, 0, 0]}>
+        <planeGeometry ref={geomRef} args={[4.5, 4.5, 64, 64]} />
+        <meshPhysicalMaterial 
+          color="#DB9CA6"
+          metalness={0.15}
+          roughness={0.65}
+          clearcoat={0.3}
+          clearcoatRoughness={0.25}
+          side={THREE.DoubleSide}
+          envMapIntensity={1.5}
+        />
+      </mesh>
     </Float>
   );
 }
 
 export function About() {
   return (
-    <section id="about" className="py-32 bg-pearl/20 relative overflow-hidden">
+    <section id="about-us" className="py-32 bg-pearl/20 relative overflow-hidden">
       {/* Decorative background element */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-cream rounded-full mix-blend-multiply filter blur-3xl opacity-50 transform translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
       
@@ -128,7 +80,7 @@ export function About() {
                   polar={[-Math.PI / 8, Math.PI / 8]} 
                   azimuth={[-Math.PI / 8, Math.PI / 8]}
                 >
-                  <Logo3D />
+                  <PremiumFabric />
                 </PresentationControls>
               </Canvas>
             </div>
@@ -165,14 +117,6 @@ export function About() {
             <p>
               Bathed in an inviting, luminous palette of soft golden creams and metallic rose gold, an Eliswa garment is not merely worn; it is felt. It's an embrace of tradition, tailored for the contemporary muse.
             </p>
-          </div>
-          
-          <div className="mt-12">
-            <img 
-              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNjAiPjxwYXRoIGQ9Ik0xMCAzMFEzMCAxMCA1MCAzMFQ5MCAzMFQxMzAgMzBUMTcwIDMwIiBmaWxsPSJub25lIiBzdHJva2U9IiNCODZCNzciIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWRhc2hhcnJheT0iNCA0Ii8+PC9zdmc+" 
-              className="w-48 opacity-50" 
-              alt="Decorative line" 
-            />
           </div>
         </motion.div>
         

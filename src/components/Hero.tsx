@@ -1,112 +1,19 @@
-import { useRef, useMemo } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Environment, Float, PresentationControls, Sparkles } from '@react-three/drei';
-import * as THREE from 'three';
 import { motion } from 'motion/react';
-
-function SilkRibbon() {
-  const groupRef = useRef<THREE.Group>(null);
-  
-  // A long, elegant scarf/ribbon geometry
-  const geometry = useMemo(() => new THREE.PlaneGeometry(40, 12, 200, 60), []);
-  const initialPositions = useMemo(() => {
-    return new Float32Array(geometry.attributes.position.array);
-  }, [geometry]);
-
-  useFrame((state) => {
-    const time = state.clock.getElapsedTime();
-    const positionAttribute = geometry.attributes.position;
-    
-    for (let i = 0; i < positionAttribute.count; i++) {
-      const origX = initialPositions[i * 3];
-      const origY = initialPositions[i * 3 + 1];
-      
-      // Smooth, flowing ribbon dynamics
-      const flowX = time * 0.4;
-      
-      // Primary large waves
-      const wave1 = Math.sin(origX * 0.12 + flowX) * 3.0;
-      // Secondary ripples for silk-like folds
-      const wave2 = Math.cos(origX * 0.25 + origY * 0.4 - flowX * 1.5) * 0.6;
-      // Elegant twisting based on Y axis to make edges curl
-      const twist = Math.sin(origX * 0.05 + flowX * 0.5) * origY * 0.6;
-      
-      positionAttribute.setZ(i, wave1 + wave2 + twist);
-      
-      // Slight vertical folds to create depth
-      const fold = Math.sin(origX * 0.15 - flowX) * 0.8;
-      positionAttribute.setY(i, origY + fold);
-    }
-    positionAttribute.needsUpdate = true;
-    geometry.computeVertexNormals();
-
-    if (groupRef.current) {
-      // Very slow, majestic rotation
-      groupRef.current.rotation.y = Math.sin(time * 0.1) * 0.1;
-      groupRef.current.rotation.z = Math.cos(time * 0.05) * 0.05;
-    }
-  });
-
-  return (
-    <Float speed={1} rotationIntensity={0.2} floatIntensity={0.3}>
-      <group ref={groupRef} rotation={[-Math.PI / 4, 0, 0]}>
-        {/* Main Silk Fabric - Pearl/Rose finish */}
-        <mesh geometry={geometry}>
-          <meshPhysicalMaterial 
-            color="#F7D2D8" // pearl
-            metalness={0.1}
-            roughness={0.3}
-            clearcoat={1.0}
-            clearcoatRoughness={0.15}
-            sheen={1}
-            sheenColor="#DB9CA6" // rose
-            side={THREE.DoubleSide}
-          />
-        </mesh>
-
-        {/* Zari thread details overlay - shimmering gold */}
-        <mesh geometry={geometry} scale={1.001}>
-          <meshPhysicalMaterial 
-            color="#D4AF37" // classic gold
-            emissive="#D4AF37"
-            emissiveIntensity={0.05}
-            metalness={1}
-            roughness={0.2}
-            wireframe={true}
-            transparent={true}
-            opacity={0.04}
-            side={THREE.DoubleSide}
-          />
-        </mesh>
-      </group>
-    </Float>
-  );
-}
 
 export function Hero() {
   return (
     <header id="home" className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-gradient-to-b from-cream to-pearl/30">
       
-      {/* 3D Background */}
+      {/* Background Image */}
       <div className="absolute inset-0 z-0">
-        <Canvas camera={{ position: [0, 0, 10], fov: 45 }}>
-          <ambientLight intensity={0.6} color="#FDE5B2" />
-          <directionalLight position={[10, 10, 5]} intensity={1.8} color="#FFFFFF" />
-          <directionalLight position={[-10, -10, -5]} intensity={1.2} color="#DB9CA6" />
-          <spotLight position={[0, 10, 0]} angle={0.6} penumbra={1} intensity={2} color="#F7D2D8" castShadow />
-          <Environment preset="studio" />
-          <PresentationControls 
-            global 
-            config={{ mass: 2, tension: 500 }} 
-            snap={{ mass: 4, tension: 1500 }} 
-            rotation={[0, 0, 0]} 
-            polar={[-Math.PI / 8, Math.PI / 8]} 
-            azimuth={[-Math.PI / 4, Math.PI / 4]}
-          >
-            <SilkRibbon />
-            <Sparkles count={150} scale={25} size={2.5} speed={0.3} opacity={0.6} color="#D4AF37" />
-          </PresentationControls>
-        </Canvas>
+        <motion.img 
+          src="https://opal.google/board/blobs/7cfc0970-2c05-42de-90a6-2a90c4f38b3c"
+          alt="Hero Background"
+          className="w-full h-full object-cover opacity-90"
+          animate={{ scale: [1, 1.05, 1] }}
+          transition={{ repeat: Infinity, duration: 20, ease: "easeInOut" }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-cream/20 to-cream/80"></div>
       </div>
 
       {/* Hero Content */}

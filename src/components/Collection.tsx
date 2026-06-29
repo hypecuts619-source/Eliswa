@@ -124,11 +124,12 @@ export function Collection() {
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
+          whileHover={{ scale: 1.03 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="order-1 md:order-2"
+          className="order-1 md:order-2 cursor-pointer"
         >
-          <div className="relative aspect-[4/5] w-full overflow-hidden bg-cream border border-vintage/20 shadow-xl shadow-vintage/5 group">
+          <div className="relative aspect-[4/5] w-full overflow-hidden bg-cream border border-vintage/20 shadow-xl shadow-vintage/5 transition-all duration-700 hover:shadow-2xl hover:shadow-vintage/20 group">
             <div className="absolute inset-0 z-0">
               <Canvas camera={{ position: [0, 0, 10], fov: 45 }}>
                 <ambientLight intensity={0.6} />
