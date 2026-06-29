@@ -21,12 +21,11 @@ export function Navbar() {
         animate={{ y: 0 }}
         transition={{ duration: 1, ease: 'easeOut' }}
       >
-        <div className="flex items-center pt-2">
-          <img 
-            src="https://opal.google/board/blobs/af18cf5c-4cfe-4dc8-ab23-d3e2806324ba" 
-            alt="Eliswa Logo" 
-            className="h-16 md:h-24 w-auto object-contain mix-blend-multiply contrast-150 saturate-200 brightness-95" 
-          />
+        <div className="flex flex-col items-center justify-center text-vintage select-none pt-2">
+          <div className="font-logo-ew text-4xl md:text-5xl leading-none flex items-center mb-1">
+            <span className="font-normal tracking-tighter">EW</span>
+          </div>
+          <span className="font-logo-text text-xl md:text-2xl tracking-[0.15em] leading-none ml-1 font-normal">Eliswa</span>
         </div>
         
         {/* Desktop Menu */}

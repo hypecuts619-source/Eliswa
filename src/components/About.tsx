@@ -37,7 +37,7 @@ function PremiumFabric() {
       <mesh ref={meshRef} position={[0, 0, 0]} rotation={[-Math.PI / 5, 0, 0]}>
         <planeGeometry ref={geomRef} args={[4.5, 4.5, 64, 64]} />
         <meshPhysicalMaterial 
-          color="#DB9CA6"
+          color="#CE758C"
           metalness={0.15}
           roughness={0.65}
           clearcoat={0.3}
@@ -70,7 +70,7 @@ export function About() {
               <Canvas camera={{ position: [0, 0, 7], fov: 45 }}>
                 <ambientLight intensity={0.5} />
                 <directionalLight position={[10, 10, 5]} intensity={1.5} color="#FFFFFF" />
-                <directionalLight position={[-10, -10, -5]} intensity={0.5} color="#DB9CA6" />
+                <directionalLight position={[-10, -10, -5]} intensity={0.5} color="#CE758C" />
                 <Environment preset="city" />
                 <PresentationControls 
                   global 
@@ -86,7 +86,7 @@ export function About() {
             </div>
             
             {/* Elegant overlay elements simulating texture */}
-            <div className="absolute inset-0 opacity-10 mix-blend-overlay pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at center, #B86B77 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+            <div className="absolute inset-0 opacity-10 mix-blend-overlay pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at center, #8B324D 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
           </div>
           {/* Decorative accents */}
           <div className="absolute -bottom-6 -right-6 w-32 h-32 border-b-2 border-r-2 border-vintage/30"></div>

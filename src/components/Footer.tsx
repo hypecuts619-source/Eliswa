@@ -4,12 +4,11 @@ export function Footer() {
       <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-16 mb-16">
         
         <div className="col-span-1">
-          <div className="flex flex-col items-start select-none mb-6">
-            <img 
-              src="https://opal.google/board/blobs/af18cf5c-4cfe-4dc8-ab23-d3e2806324ba" 
-              alt="Eliswa Logo" 
-              className="h-20 w-auto object-contain mix-blend-multiply contrast-150 saturate-200 brightness-95 mb-2 -ml-2" 
-            />
+          <div className="flex flex-col items-center justify-center text-vintage select-none mb-6 self-start w-fit">
+            <div className="font-logo-ew text-5xl leading-none flex items-center mb-1">
+              <span className="font-normal tracking-tighter">EW</span>
+            </div>
+            <span className="font-logo-text text-2xl tracking-[0.15em] leading-none ml-1 font-normal">Eliswa</span>
           </div>
           <p className="text-vintage font-display italic text-lg mb-4 tracking-widest">You are rare.</p>
           <p className="text-vintage/70 font-light leading-relaxed mb-6">

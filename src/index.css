@@ -1,14 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cinzel+Decorative:wght@400;700&family=Pinyon+Script&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --color-cream: #FDE5B2;
-  --color-rose: #DB9CA6;
-  --color-vintage: #B86B77;
-  --color-pearl: #F7D2D8;
+  --color-cream: #EAEBD5;
+  --color-rose: #CE758C;
+  --color-vintage: #8B324D;
+  --color-pearl: #E8D3D8;
+  --color-olive: #6B742A;
   
   --font-display: "Playfair Display", serif;
   --font-body: "Montserrat", sans-serif;
+  --font-logo-ew: "Pinyon Script", cursive;
+  --font-logo-text: "Cinzel Decorative", serif;
 }
 
 body {
