@@ -112,21 +112,21 @@ export function Hero() {
       {/* Hero Content */}
       <div className="relative z-10 text-center px-4 max-w-4xl mx-auto pointer-events-none mt-20">
         <motion.h1 
-          className="font-display text-5xl md:text-8xl text-vintage leading-tight mb-6"
+          className="font-display text-5xl md:text-7xl lg:text-8xl text-vintage leading-tight mb-6 drop-shadow-sm"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.5, ease: 'easeOut' }}
         >
-          Spun From Romance,<br />Sculpted in Gold
+          Elegance That Defies<br />The Ordinary.
         </motion.h1>
         
         <motion.p 
-          className="text-lg md:text-xl text-vintage/80 font-light tracking-wide mb-10"
+          className="text-xl md:text-3xl text-vintage font-display italic tracking-widest mb-10 drop-shadow-sm"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.8, ease: 'easeOut' }}
         >
-          The New Standard of Bespoke Elegance.
+          You are rare.
         </motion.p>
         
         <motion.div

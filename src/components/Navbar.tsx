@@ -21,12 +21,35 @@ export function Navbar() {
         animate={{ y: 0 }}
         transition={{ duration: 1, ease: 'easeOut' }}
       >
-        <div className="flex items-center">
-          <img src="https://opal.google/board/blobs/af18cf5c-4cfe-4dc8-ab23-d3e2806324ba" alt="Eliswa Logo" className="h-12 w-auto object-contain" />
+        <div className="flex flex-col items-center justify-center select-none pt-2">
+          <div 
+            className="font-display flex relative text-4xl leading-none"
+            style={{ 
+              background: 'linear-gradient(135deg, #DB9CA6 0%, #B86B77 100%)', 
+              WebkitBackgroundClip: 'text', 
+              WebkitTextFillColor: 'transparent',
+              filter: 'drop-shadow(1px 1px 2px rgba(184, 107, 119, 0.3))'
+            }}
+          >
+            <span className="italic pr-1">E</span>
+            <span className="-ml-4 mt-3">W</span>
+          </div>
+          <div 
+            className="text-3xl font-display mt-2 flex items-baseline"
+            style={{ 
+              background: 'linear-gradient(135deg, #DB9CA6 0%, #B86B77 100%)', 
+              WebkitBackgroundClip: 'text', 
+              WebkitTextFillColor: 'transparent',
+              filter: 'drop-shadow(1px 1px 2px rgba(184, 107, 119, 0.3))'
+            }}
+          >
+            <span className="italic -mr-1">E</span>
+            <span className="tracking-[0.2em]">liswa</span>
+          </div>
         </div>
         
         {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-8 text-sm tracking-widest text-vintage font-display font-medium">
+        <div className="hidden md:flex space-x-10 text-lg tracking-widest text-vintage font-display font-medium">
           {['Home', 'Collection', 'About Us', 'Contact'].map((item) => (
             <a 
               key={item} 
@@ -58,7 +81,7 @@ export function Navbar() {
           <a 
             key={item} 
             href={`#${item.toLowerCase().replace(' ', '-')}`} 
-            className="text-2xl font-display text-vintage hover:text-rose transition-colors"
+            className="text-3xl font-display text-vintage hover:text-rose transition-colors"
             onClick={() => setIsOpen(false)}
           >
             {item}

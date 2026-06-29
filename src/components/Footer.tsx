@@ -4,7 +4,33 @@ export function Footer() {
       <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-16 mb-16">
         
         <div className="col-span-1">
-          <h3 className="font-display text-3xl text-vintage mb-6 tracking-widest uppercase">ELISWA</h3>
+          <div className="flex flex-col items-start select-none mb-6">
+            <div 
+              className="font-display flex relative text-3xl leading-none"
+              style={{ 
+                background: 'linear-gradient(135deg, #DB9CA6 0%, #B86B77 100%)', 
+                WebkitBackgroundClip: 'text', 
+                WebkitTextFillColor: 'transparent',
+                filter: 'drop-shadow(1px 1px 2px rgba(184, 107, 119, 0.3))'
+              }}
+            >
+              <span className="italic pr-1">E</span>
+              <span className="-ml-3 mt-2">W</span>
+            </div>
+            <div 
+              className="text-3xl font-display mt-1 flex items-baseline"
+              style={{ 
+                background: 'linear-gradient(135deg, #DB9CA6 0%, #B86B77 100%)', 
+                WebkitBackgroundClip: 'text', 
+                WebkitTextFillColor: 'transparent',
+                filter: 'drop-shadow(1px 1px 2px rgba(184, 107, 119, 0.3))'
+              }}
+            >
+              <span className="italic -mr-1">E</span>
+              <span className="tracking-[0.2em]">liswa</span>
+            </div>
+          </div>
+          <p className="text-vintage font-display italic text-lg mb-4 tracking-widest">You are rare.</p>
           <p className="text-vintage/70 font-light leading-relaxed mb-6">
             A sanctuary of artisanal luxury—a tribute to classical femininity softly reimagined for the modern world.
           </p>

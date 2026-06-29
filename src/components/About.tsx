@@ -46,7 +46,7 @@ function Logo3D() {
           />
         </Text>
         <Text 
-          font={italicFontUrl} 
+          font={fontUrl} 
           position={[0.3, 0.45, 0.1]} 
           fontSize={1.4} 
           color="#B86B77"
@@ -60,22 +60,39 @@ function Logo3D() {
             clearcoatRoughness={0.1}
           />
         </Text>
-        <Text 
-          font={fontUrl} 
-          position={[0, -0.6, 0.2]} 
-          fontSize={1.2} 
-          letterSpacing={0.12}
-          color="#B86B77"
-        >
-          Eliswa
-          <meshPhysicalMaterial 
-            color="#DB9CA6"
-            metalness={0.9}
-            roughness={0.15}
-            clearcoat={1}
-            clearcoatRoughness={0.1}
-          />
-        </Text>
+        <group position={[0, -0.6, 0.2]}>
+          <Text 
+            font={italicFontUrl} 
+            position={[-0.9, 0, 0]} 
+            fontSize={1.2} 
+            color="#B86B77"
+          >
+            E
+            <meshPhysicalMaterial 
+              color="#DB9CA6"
+              metalness={0.9}
+              roughness={0.15}
+              clearcoat={1}
+              clearcoatRoughness={0.1}
+            />
+          </Text>
+          <Text 
+            font={fontUrl} 
+            position={[0.55, 0, 0]} 
+            fontSize={1.2} 
+            letterSpacing={0.12}
+            color="#B86B77"
+          >
+            liswa
+            <meshPhysicalMaterial 
+              color="#DB9CA6"
+              metalness={0.9}
+              roughness={0.15}
+              clearcoat={1}
+              clearcoatRoughness={0.1}
+            />
+          </Text>
+        </group>
       </group>
     </Float>
   );
