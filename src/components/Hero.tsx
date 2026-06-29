@@ -12,6 +12,7 @@ export function Hero() {
           className="w-full h-full object-cover opacity-90"
           animate={{ scale: [1, 1.05, 1] }}
           transition={{ repeat: Infinity, duration: 20, ease: "easeInOut" }}
+          referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-cream/20 to-cream/80"></div>
       </div>

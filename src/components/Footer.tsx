@@ -37,9 +37,6 @@ export function Footer() {
             <li>
               <a href="mailto:contact@eliswa.com" className="hover:text-rose transition-colors">contact@eliswa.com</a>
             </li>
-            <li>
-              <a href="https://wa.me/919747771665" className="hover:text-rose transition-colors">+91 97477 71665</a>
-            </li>
           </ul>
         </div>
         

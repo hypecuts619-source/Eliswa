@@ -1,4 +1,4 @@
-import { motion } from 'motion/react';
+import { motion, useScroll, useTransform } from 'motion/react';
 import { useRef, useMemo, Suspense } from 'react';
 import { Canvas, useFrame, useLoader } from '@react-three/fiber';
 import { Environment, Float, PresentationControls } from '@react-three/drei';
@@ -50,7 +50,19 @@ function OnamImage3D() {
   );
 }
 
-export function Collection() {
+interface CollectionProps {
+  onOpenWaitlist?: () => void;
+}
+
+export function Collection({ onOpenWaitlist }: CollectionProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+  
+  const y = useTransform(scrollYProgress, [0, 1], [-40, 40]);
+
   return (
     <section id="collection" className="py-32 px-6 md:px-20 max-w-7xl mx-auto">
       <div className="grid md:grid-cols-2 gap-16 items-center">
@@ -65,12 +77,16 @@ export function Collection() {
           <p className="text-lg text-vintage/90 leading-relaxed mb-10 font-light">
             A cultural masterpiece, elegantly woven in soft creams and opulent metallic rose gold. The exclusive Onam Sarees collection is quietly taking shape, bringing a bespoke, feminine grace to storied traditions. Prepare to drape yourself in modern romance—unveiling soon.
           </p>
-          <button className="px-10 py-4 border-2 border-vintage text-vintage hover:bg-vintage hover:text-white transition-all duration-500 tracking-widest uppercase text-sm font-medium">
+          <button 
+            onClick={onOpenWaitlist}
+            className="px-10 py-4 border-2 border-vintage text-vintage hover:bg-vintage hover:text-white transition-all duration-500 tracking-widest uppercase text-sm font-medium"
+          >
             Join the Waitlist
           </button>
         </motion.div>
         
         <motion.div 
+          ref={containerRef}
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           whileHover={{ scale: 1.03 }}
@@ -79,7 +95,7 @@ export function Collection() {
           className="order-1 md:order-2 cursor-pointer"
         >
           <div className="relative aspect-[4/5] w-full overflow-hidden bg-cream border border-vintage/20 shadow-xl shadow-vintage/5 transition-all duration-700 hover:shadow-2xl hover:shadow-vintage/20 group">
-            <div className="absolute inset-0 z-0">
+            <motion.div className="absolute inset-0 z-0 h-[120%] -top-[10%]" style={{ y }}>
               <Canvas camera={{ position: [0, 0, 10], fov: 45 }}>
                 <ambientLight intensity={0.6} />
                 <directionalLight position={[5, 10, 8]} intensity={1.2} color="#FFFFFF" />
@@ -98,7 +114,7 @@ export function Collection() {
                   </Suspense>
                 </PresentationControls>
               </Canvas>
-            </div>
+            </motion.div>
             
             {/* Elegant overlay elements simulating texture */}
             <div className="absolute inset-0 opacity-20 mix-blend-overlay pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at center, #8B324D 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
