@@ -19,14 +19,15 @@ export function Hero() {
 
       {/* Hero Content */}
       <div className="relative z-10 text-center px-4 max-w-4xl mx-auto pointer-events-none mt-20">
-        <motion.h1 
+        <h1 className="sr-only">Premium Handloom Kerala Kasavu & Tissue Sarees</h1>
+        <motion.h2 
           className="font-display text-5xl md:text-7xl lg:text-8xl text-vintage leading-tight mb-6 drop-shadow-sm"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.5, ease: 'easeOut' }}
         >
           Elegance That Defies<br />The Ordinary.
-        </motion.h1>
+        </motion.h2>
         
         <motion.p 
           className="text-xl md:text-3xl text-vintage font-display italic tracking-widest mb-10 drop-shadow-sm"
