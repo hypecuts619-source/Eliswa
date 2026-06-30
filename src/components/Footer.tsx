@@ -8,7 +8,10 @@ export function Footer() {
             <div className="font-logo-ew text-5xl leading-none flex items-center mb-1">
               <span className="font-normal tracking-tighter">EW</span>
             </div>
-            <span className="font-logo-text text-2xl tracking-[0.15em] leading-none ml-1 font-normal">Eliswa</span>
+            <div className="flex items-baseline ml-1 leading-none">
+              <span className="font-logo-ew text-4xl normal-case">E</span>
+              <span className="font-logo-text text-2xl tracking-[0.15em] uppercase">LISWA</span>
+            </div>
           </div>
           <p className="text-vintage font-display italic text-lg mb-4 tracking-widest">You are rare.</p>
           <p className="text-vintage/70 font-light leading-relaxed mb-6">
