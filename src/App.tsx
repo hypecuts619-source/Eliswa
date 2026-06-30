@@ -11,6 +11,7 @@ import { About } from './components/About';
 import { Footer } from './components/Footer';
 import { WhatsAppButton } from './components/WhatsAppButton';
 import { WaitlistModal } from './components/WaitlistModal';
+import { BackToTop } from './components/BackToTop';
 
 export default function App() {
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
@@ -23,6 +24,7 @@ export default function App() {
       <About />
       <Footer />
       <WhatsAppButton />
+      <BackToTop />
       <WaitlistModal isOpen={isWaitlistOpen} onClose={() => setIsWaitlistOpen(false)} />
     </main>
   );

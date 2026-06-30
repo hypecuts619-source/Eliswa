@@ -3,25 +3,33 @@ import { useRef, useMemo, Suspense, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Environment, Float, PresentationControls } from '@react-three/drei';
 import * as THREE from 'three';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Expand } from 'lucide-react';
+import { SareeDetailModal } from './SareeDetailModal';
 
-interface OnamSareeData {
+export interface OnamSareeData {
   id: string;
   name: string;
   baseColor: string;
   borderColor: string;
   accentColor: string;
   pattern: 'plain' | 'brocade' | 'geometric' | 'mural';
+  material: 'Cotton' | 'Tissue' | 'Silk';
+  occasion: 'Festive' | 'Wedding' | 'Casual';
 }
 
-const ONAM_SAREES: OnamSareeData[] = [
-  { id: 'traditional-kasavu', name: 'Traditional Kerala Kasavu', baseColor: '#FDFBF7', borderColor: '#D4AF37', accentColor: '#B8860B', pattern: 'plain' },
-  { id: 'silver-tissue', name: 'Silver Tissue Kasavu', baseColor: '#F5F5F5', borderColor: '#C0C0C0', accentColor: '#A9A9A9', pattern: 'plain' },
-  { id: 'golden-tissue', name: 'Golden Tissue Kasavu', baseColor: '#F8F0E3', borderColor: '#E5C158', accentColor: '#DAA520', pattern: 'plain' },
-  { id: 'mural-painted', name: 'Mural Painted Kasavu', baseColor: '#FDFBF7', borderColor: '#D4AF37', accentColor: '#8B0000', pattern: 'mural' },
-  { id: 'green-border', name: 'Kasavu with Green Border', baseColor: '#FDFBF7', borderColor: '#2E8B57', accentColor: '#006400', pattern: 'plain' },
-  { id: 'red-border', name: 'Kasavu with Red Border', baseColor: '#FDFBF7', borderColor: '#8B0000', accentColor: '#A52A2A', pattern: 'plain' },
-  { id: 'checks-kasavu', name: 'Checkered Kasavu', baseColor: '#FDFBF7', borderColor: '#D4AF37', accentColor: '#B8860B', pattern: 'geometric' }
+export const ONAM_SAREES: OnamSareeData[] = [
+  { id: 'traditional-kasavu', name: 'Traditional Kerala Kasavu', baseColor: '#FDFBF7', borderColor: '#D4AF37', accentColor: '#B8860B', pattern: 'plain', material: 'Cotton', occasion: 'Festive' },
+  { id: 'silver-tissue', name: 'Silver Tissue Kasavu', baseColor: '#F5F5F5', borderColor: '#C0C0C0', accentColor: '#A9A9A9', pattern: 'plain', material: 'Tissue', occasion: 'Wedding' },
+  { id: 'golden-tissue', name: 'Golden Tissue Kasavu', baseColor: '#F8F0E3', borderColor: '#E5C158', accentColor: '#DAA520', pattern: 'plain', material: 'Tissue', occasion: 'Wedding' },
+  { id: 'rose-gold-tissue', name: 'Rose Gold Tissue', baseColor: '#FAF0E6', borderColor: '#B76E79', accentColor: '#C07C88', pattern: 'brocade', material: 'Tissue', occasion: 'Wedding' },
+  { id: 'minimalist-tissue', name: 'Minimalist Tissue', baseColor: '#FDFDFD', borderColor: '#D4AF37', accentColor: '#F5DEB3', pattern: 'plain', material: 'Tissue', occasion: 'Casual' },
+  { id: 'mural-painted', name: 'Mural Painted Kasavu', baseColor: '#FDFBF7', borderColor: '#D4AF37', accentColor: '#8B0000', pattern: 'mural', material: 'Silk', occasion: 'Festive' },
+  { id: 'copper-tissue', name: 'Copper Tissue Kasavu', baseColor: '#FFF8DC', borderColor: '#B87333', accentColor: '#D2691E', pattern: 'plain', material: 'Tissue', occasion: 'Festive' },
+  { id: 'peacock-silk', name: 'Peacock Motif Silk Kasavu', baseColor: '#FDFBF7', borderColor: '#D4AF37', accentColor: '#008080', pattern: 'brocade', material: 'Silk', occasion: 'Festive' },
+  { id: 'temple-border', name: 'Temple Border Kasavu', baseColor: '#FDFBF7', borderColor: '#8B0000', accentColor: '#D4AF37', pattern: 'geometric', material: 'Cotton', occasion: 'Festive' },
+  { id: 'green-border', name: 'Kasavu with Green Border', baseColor: '#FDFBF7', borderColor: '#2E8B57', accentColor: '#006400', pattern: 'plain', material: 'Cotton', occasion: 'Casual' },
+  { id: 'red-border', name: 'Kasavu with Red Border', baseColor: '#FDFBF7', borderColor: '#8B0000', accentColor: '#A52A2A', pattern: 'plain', material: 'Cotton', occasion: 'Casual' },
+  { id: 'checks-kasavu', name: 'Checkered Kasavu', baseColor: '#FDFBF7', borderColor: '#D4AF37', accentColor: '#B8860B', pattern: 'geometric', material: 'Cotton', occasion: 'Festive' }
 ];
 
 function OnamSareeFabric({ saree }: { saree: OnamSareeData }) {
@@ -139,29 +147,92 @@ interface CollectionProps {
 }
 
 export function Collection({ onOpenWaitlist }: CollectionProps) {
+  const [selectedMaterial, setSelectedMaterial] = useState<string | null>(null);
+  const [selectedOccasion, setSelectedOccasion] = useState<string | null>(null);
+
+  const filteredSarees = useMemo(() => {
+    return ONAM_SAREES.filter(saree => {
+      const matchMaterial = selectedMaterial ? saree.material === selectedMaterial : true;
+      const matchOccasion = selectedOccasion ? saree.occasion === selectedOccasion : true;
+      return matchMaterial && matchOccasion;
+    });
+  }, [selectedMaterial, selectedOccasion]);
+
   const [currentIndex, setCurrentIndex] = useState(0);
+  
+  // Reset index when filters change
+  useMemo(() => {
+    setCurrentIndex(0);
+  }, [selectedMaterial, selectedOccasion]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"]
   });
   
-  const y = useTransform(scrollYProgress, [0, 1], [-40, 40]);
+  const y = useTransform(scrollYProgress, [0, 1], ["-20%", "20%"]);
 
   const handleNext = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCurrentIndex((prev) => (prev + 1) % ONAM_SAREES.length);
+    if (filteredSarees.length > 0) {
+      setCurrentIndex((prev) => (prev + 1) % filteredSarees.length);
+    }
   };
 
   const handlePrev = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setCurrentIndex((prev) => (prev - 1 + ONAM_SAREES.length) % ONAM_SAREES.length);
+    if (filteredSarees.length > 0) {
+      setCurrentIndex((prev) => (prev - 1 + filteredSarees.length) % filteredSarees.length);
+    }
   };
 
-  const currentSaree = ONAM_SAREES[currentIndex];
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const currentSaree = filteredSarees[currentIndex];
 
   return (
     <section id="collection" className="py-32 px-6 md:px-20 max-w-7xl mx-auto">
+      {/* Filter Bar */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="mb-16 flex flex-col xl:flex-row justify-between items-center gap-6 border-b border-vintage/10 pb-6"
+      >
+        <h3 className="font-display text-2xl text-vintage">Curate Your Look</h3>
+        <div className="flex flex-wrap gap-6 items-center justify-center xl:justify-end">
+          <div className="flex flex-wrap gap-2 items-center justify-center">
+            <span className="text-xs font-medium tracking-widest uppercase text-vintage/60 mr-2">Material:</span>
+            {['Cotton', 'Tissue', 'Silk'].map(material => (
+              <button
+                key={material}
+                onClick={() => setSelectedMaterial(prev => prev === material ? null : material)}
+                className={`px-4 py-1.5 rounded-full text-xs tracking-widest uppercase transition-all duration-300 border ${selectedMaterial === material ? 'bg-vintage text-white border-vintage' : 'border-vintage/20 text-vintage hover:border-vintage/50'}`}
+              >
+                {material}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-2 items-center justify-center">
+            <span className="text-xs font-medium tracking-widest uppercase text-vintage/60 mr-2">Occasion:</span>
+            {['Festive', 'Wedding', 'Casual'].map(occasion => (
+              <button
+                key={occasion}
+                onClick={() => setSelectedOccasion(prev => prev === occasion ? null : occasion)}
+                className={`px-4 py-1.5 rounded-full text-xs tracking-widest uppercase transition-all duration-300 border ${selectedOccasion === occasion ? 'bg-vintage text-white border-vintage' : 'border-vintage/20 text-vintage hover:border-vintage/50'}`}
+              >
+                {occasion}
+              </button>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+
       <div className="grid md:grid-cols-2 gap-16 items-center">
         <motion.div 
           initial={{ opacity: 0, y: 50 }}
@@ -184,78 +255,115 @@ export function Collection({ onOpenWaitlist }: CollectionProps) {
         
         <motion.div 
           ref={containerRef}
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
           whileHover={{ scale: 1.03 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="order-1 md:order-2"
+          className="order-1 md:order-2 cursor-pointer"
+          onClick={handleOpenModal}
         >
           <div className="relative aspect-[4/5] w-full overflow-hidden bg-cream border border-vintage/20 shadow-xl shadow-vintage/5 transition-all duration-700 hover:shadow-2xl hover:shadow-vintage/20 group">
-            <motion.div className="absolute inset-0 z-0 h-[120%] -top-[10%]" style={{ y }}>
-              <Canvas camera={{ position: [0, 0, 10], fov: 45 }}>
-                <ambientLight intensity={0.6} />
-                <directionalLight position={[5, 10, 8]} intensity={1.2} color="#FFFFFF" />
-                <directionalLight position={[-5, -10, -5]} intensity={0.5} color="#8B324D" />
-                <Environment preset="city" />
-                <PresentationControls 
-                  global 
-                  config={{ mass: 1, tension: 300 }} 
-                  snap={{ mass: 2, tension: 800 }} 
-                  rotation={[0, 0, 0]} 
-                  polar={[-Math.PI / 6, Math.PI / 6]} 
-                  azimuth={[-Math.PI / 4, Math.PI / 4]}
-                >
-                  <Suspense fallback={null}>
-                    <OnamSareeFabric saree={currentSaree} />
-                  </Suspense>
-                </PresentationControls>
-              </Canvas>
-            </motion.div>
-            
-            {/* Elegant overlay elements simulating texture */}
-            <div className="absolute inset-0 opacity-20 mix-blend-overlay pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at center, #8B324D 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
-            
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-[85%] h-[85%] border border-vintage/30 rounded-t-full relative flex flex-col items-center justify-end p-8 pb-12">
-                <span className="font-display text-2xl text-vintage/70 italic drop-shadow-md">Onam '26</span>
-              </div>
-            </div>
-
-            {/* Carousel Controls */}
-            <div className="absolute bottom-8 left-0 right-0 flex justify-between items-center px-8 z-20 pointer-events-none">
-              <button 
-                onClick={handlePrev}
-                className="w-10 h-10 rounded-full bg-white/60 backdrop-blur-md flex items-center justify-center text-vintage hover:bg-vintage hover:text-white transition-colors shadow-lg pointer-events-auto"
-              >
-                <ChevronLeft size={20} />
-              </button>
-              
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentSaree.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="bg-white/80 backdrop-blur-md px-4 py-1.5 rounded-full shadow-lg border border-vintage/10 pointer-events-auto flex items-center"
-                >
-                  <span className="font-display tracking-wider text-vintage uppercase text-xs">
-                    {currentSaree.name}
-                  </span>
+            {filteredSarees.length > 0 ? (
+              <>
+                <motion.div className="absolute inset-0 z-0 h-[120%] -top-[10%]" style={{ y }}>
+                  <Canvas camera={{ position: [0, 0, 10], fov: 45 }}>
+                    <ambientLight intensity={0.6} />
+                    <directionalLight position={[5, 10, 8]} intensity={1.2} color="#FFFFFF" />
+                    <directionalLight position={[-5, -10, -5]} intensity={0.5} color="#8B324D" />
+                    <Environment preset="city" />
+                    <PresentationControls 
+                      global 
+                      snap={true} 
+                      rotation={[0, 0, 0]} 
+                      polar={[-Math.PI / 6, Math.PI / 6]} 
+                      azimuth={[-Math.PI / 4, Math.PI / 4]}
+                    >
+                      <Suspense fallback={null}>
+                        <OnamSareeFabric saree={currentSaree} />
+                      </Suspense>
+                    </PresentationControls>
+                  </Canvas>
                 </motion.div>
-              </AnimatePresence>
+                
+                {/* Elegant overlay elements simulating texture */}
+                <div className="absolute inset-0 opacity-20 mix-blend-overlay pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at center, #8B324D 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
+                
+                <div className="absolute top-4 right-4 z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="bg-white/60 backdrop-blur-md rounded-full p-2 text-vintage shadow-md">
+                    <Expand size={20} />
+                  </div>
+                </div>
 
-              <button 
-                onClick={handleNext}
-                className="w-10 h-10 rounded-full bg-white/60 backdrop-blur-md flex items-center justify-center text-vintage hover:bg-vintage hover:text-white transition-colors shadow-lg pointer-events-auto"
-              >
-                <ChevronRight size={20} />
-              </button>
-            </div>
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="w-[85%] h-[85%] border border-vintage/30 rounded-t-full relative flex flex-col items-center justify-end p-8 pb-12">
+                    <span className="font-display text-2xl text-vintage/70 italic drop-shadow-md">Onam '26</span>
+                  </div>
+                </div>
 
+                {/* Carousel Controls */}
+                <div className="absolute bottom-8 left-0 right-0 flex justify-between items-center px-8 z-20 pointer-events-none">
+                  <button 
+                    onClick={handlePrev}
+                    className="w-10 h-10 rounded-full bg-white/60 backdrop-blur-md flex items-center justify-center text-vintage hover:bg-vintage hover:text-white transition-colors shadow-lg pointer-events-auto"
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+                  
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={currentSaree.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="bg-white/80 backdrop-blur-md px-4 py-1.5 rounded-full shadow-lg border border-vintage/10 pointer-events-auto flex items-center"
+                    >
+                      <span className="font-display tracking-wider text-vintage uppercase text-xs">
+                        {currentSaree.name}
+                      </span>
+                    </motion.div>
+                  </AnimatePresence>
+
+                  <button 
+                    onClick={handleNext}
+                    className="w-10 h-10 rounded-full bg-white/60 backdrop-blur-md flex items-center justify-center text-vintage hover:bg-vintage hover:text-white transition-colors shadow-lg pointer-events-auto"
+                  >
+                    <ChevronRight size={20} />
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center bg-cream/50">
+                <span className="font-display tracking-wider text-vintage/60 uppercase text-xs mb-4">
+                  No matches found
+                </span>
+                <p className="text-vintage font-light leading-relaxed max-w-sm">
+                  We are continually expanding our collection. Please try adjusting your curated filters to discover more exquisite pieces.
+                </p>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedMaterial(null);
+                    setSelectedOccasion(null);
+                  }}
+                  className="mt-8 px-6 py-2 border border-vintage/30 text-vintage hover:bg-vintage hover:text-white transition-all duration-300 tracking-widest uppercase text-xs"
+                >
+                  Clear Filters
+                </button>
+              </div>
+            )}
           </div>
         </motion.div>
       </div>
+
+      {currentSaree && (
+        <SareeDetailModal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          saree={currentSaree} 
+          fabricComponent={<OnamSareeFabric saree={currentSaree} />} 
+        />
+      )}
     </section>
   );
 }

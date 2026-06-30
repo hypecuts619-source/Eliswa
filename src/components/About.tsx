@@ -143,7 +143,7 @@ export function About() {
     offset: ["start end", "end start"]
   });
   
-  const y = useTransform(scrollYProgress, [0, 1], [-40, 40]);
+  const y = useTransform(scrollYProgress, [0, 1], ["-20%", "20%"]);
 
   const handleNext = () => {
     setCurrentSareeIndex((prev) => (prev + 1) % SAREES.length);
@@ -164,8 +164,8 @@ export function About() {
         
         <motion.div 
           ref={containerRef}
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="relative"
@@ -179,8 +179,7 @@ export function About() {
                 <Environment preset="city" />
                 <PresentationControls 
                   global 
-                  config={{ mass: 1, tension: 200 }} 
-                  snap={{ mass: 2, tension: 500 }} 
+                  snap={true} 
                   rotation={[0, 0, 0]} 
                   polar={[-Math.PI / 8, Math.PI / 8]} 
                   azimuth={[-Math.PI / 8, Math.PI / 8]}
@@ -230,8 +229,8 @@ export function About() {
         </motion.div>
 
         <motion.div 
-          initial={{ opacity: 0, x: 50 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           className="pr-4"
