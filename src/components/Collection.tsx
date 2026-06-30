@@ -15,10 +15,13 @@ interface OnamSareeData {
 }
 
 const ONAM_SAREES: OnamSareeData[] = [
-  { id: 'traditional-kasavu', name: 'Traditional Kasavu', baseColor: '#FDFBF7', borderColor: '#D4AF37', accentColor: '#B8860B', pattern: 'plain' },
+  { id: 'traditional-kasavu', name: 'Traditional Kerala Kasavu', baseColor: '#FDFBF7', borderColor: '#D4AF37', accentColor: '#B8860B', pattern: 'plain' },
   { id: 'silver-tissue', name: 'Silver Tissue Kasavu', baseColor: '#F5F5F5', borderColor: '#C0C0C0', accentColor: '#A9A9A9', pattern: 'plain' },
-  { id: 'golden-tissue', name: 'Golden Tissue', baseColor: '#F8F0E3', borderColor: '#E5C158', accentColor: '#DAA520', pattern: 'plain' },
-  { id: 'mural-painted', name: 'Mural Painted Kasavu', baseColor: '#FDFBF7', borderColor: '#D4AF37', accentColor: '#8B0000', pattern: 'mural' }
+  { id: 'golden-tissue', name: 'Golden Tissue Kasavu', baseColor: '#F8F0E3', borderColor: '#E5C158', accentColor: '#DAA520', pattern: 'plain' },
+  { id: 'mural-painted', name: 'Mural Painted Kasavu', baseColor: '#FDFBF7', borderColor: '#D4AF37', accentColor: '#8B0000', pattern: 'mural' },
+  { id: 'green-border', name: 'Kasavu with Green Border', baseColor: '#FDFBF7', borderColor: '#2E8B57', accentColor: '#006400', pattern: 'plain' },
+  { id: 'red-border', name: 'Kasavu with Red Border', baseColor: '#FDFBF7', borderColor: '#8B0000', accentColor: '#A52A2A', pattern: 'plain' },
+  { id: 'checks-kasavu', name: 'Checkered Kasavu', baseColor: '#FDFBF7', borderColor: '#D4AF37', accentColor: '#B8860B', pattern: 'geometric' }
 ];
 
 function OnamSareeFabric({ saree }: { saree: OnamSareeData }) {
@@ -51,6 +54,16 @@ function OnamSareeFabric({ saree }: { saree: OnamSareeData }) {
             ctx.fillStyle = saree.accentColor;
           }
         }
+      } else if (saree.pattern === 'geometric') {
+        ctx.fillStyle = saree.accentColor;
+        ctx.globalAlpha = 0.3;
+        for(let x = 120; x < 900; x += 40) {
+          ctx.fillRect(x, 0, 2, 1024);
+        }
+        for(let y = 0; y < 850; y += 40) {
+          ctx.fillRect(0, y, 1024, 2);
+        }
+        ctx.globalAlpha = 1.0;
       }
 
       // Border gradient
