@@ -38,7 +38,7 @@ export function Navbar() {
             <img 
               src="/Eliswa_logo.png" 
               alt="EW Logo" 
-              className="h-12 md:h-16 transition-transform duration-300 group-hover/logo:scale-[1.02] object-contain mix-blend-multiply"
+              className="h-16 md:h-20 transition-transform duration-300 group-hover/logo:scale-[1.02] object-contain mix-blend-multiply"
             />
           </a>
 
