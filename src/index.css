@@ -2,11 +2,11 @@
 @import "tailwindcss";
 
 @theme {
-  --color-cream: #EAEBD5;
-  --color-rose: #CE758C;
-  --color-vintage: #8B324D;
-  --color-pearl: #E8D3D8;
-  --color-olive: #6B742A;
+  --color-cream: #FAF6EB;
+  --color-rose: #C1838F;
+  --color-vintage: #4A1521;
+  --color-pearl: #F5EBE6;
+  --color-olive: #5E6032;
   
   --font-display: "Playfair Display", serif;
   --font-body: "Montserrat", sans-serif;
@@ -15,5 +15,78 @@
 }
 
 body {
-  @apply font-body bg-cream text-vintage overflow-x-hidden selection:bg-rose selection:text-white;
+  font-family: "Montserrat", sans-serif;
+  background-color: #FAF6EB;
+  color: #4A1521;
+  overflow-x: hidden;
 }
+
+.rose-gold-metallic {
+  background: linear-gradient(
+    135deg,
+    #cf958f 0%,
+    #f2d5d1 25%,
+    #f9e0dc 45%,
+    #cf958f 70%,
+    #a86058 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0px 1px 1px rgba(74, 21, 33, 0.22));
+  display: inline-block;
+}
+
+@keyframes saree-color-flow {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 200%; }
+}
+
+@keyframes saree-shadow-flow {
+  0% { background-position: 0% 0%, 0% 0%; }
+  100% { background-position: 200% 200%, 150% 150%; }
+}
+
+.bg-cloth-3d {
+  /* Pastel Saree colors */
+  background: 
+    linear-gradient(
+      135deg, 
+      #fff0f3 0%, 
+      #fdf6e3 25%, 
+      #fae8ed 50%, 
+      #fef9e7 75%, 
+      #fff0f3 100%
+    );
+  background-size: 300% 300%;
+  animation: saree-color-flow 35s ease-in-out infinite alternate;
+}
+
+.bg-cloth-3d::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* Shadow and highlight waves moving diagonally */
+  background: 
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.4) 10%,
+      rgba(255, 255, 255, 0) 20%,
+      rgba(0, 0, 0, 0.015) 30%,
+      rgba(255, 255, 255, 0) 40%
+    ),
+    repeating-linear-gradient(
+      75deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.2) 15%,
+      rgba(255, 255, 255, 0) 30%,
+      rgba(0, 0, 0, 0.01) 45%,
+      rgba(255, 255, 255, 0) 60%
+    );
+  background-size: 300% 300%, 200% 200%;
+  animation: saree-shadow-flow 25s ease-in-out infinite alternate;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+

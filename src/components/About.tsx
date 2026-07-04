@@ -1,8 +1,5 @@
-import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
-import { useRef, useMemo, useState } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Environment, Float, PresentationControls } from '@react-three/drei';
-import * as THREE from 'three';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { useRef, useMemo, useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface SareeData {
@@ -25,125 +22,148 @@ const SAREES: SareeData[] = [
   { id: 'baluchari', name: 'Baluchari', baseColor: '#000080', borderColor: '#CD5C5C', accentColor: '#FFD700', pattern: 'brocade' }
 ];
 
-function SareeFabric({ saree }: { saree: SareeData }) {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const geomRef = useRef<THREE.PlaneGeometry>(null);
-  
-  const texture = useMemo(() => {
-    const canvas = document.createElement('canvas');
-    canvas.width = 1024;
-    canvas.height = 1024;
-    const ctx = canvas.getContext('2d');
-    if (ctx) {
-      // Base color
-      ctx.fillStyle = saree.baseColor;
-      ctx.fillRect(0, 0, 1024, 1024);
-      
-      // Patterns
-      if (saree.pattern === 'brocade') {
-        ctx.fillStyle = saree.borderColor;
-        for(let x = 120; x < 900; x += 60) {
-          for(let y = 0; y < 850; y += 60) {
-            ctx.beginPath();
-            ctx.arc(x, y, 6, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(x + 30, y + 30, 4, 0, Math.PI * 2);
-            ctx.fill();
-          }
-        }
-      } else if (saree.pattern === 'geometric') {
-        ctx.fillStyle = saree.accentColor;
-        for(let x = 120; x < 900; x += 80) {
-          for(let y = 0; y < 850; y += 80) {
-            ctx.beginPath();
-            ctx.moveTo(x, y - 20);
-            ctx.lineTo(x + 20, y);
-            ctx.lineTo(x, y + 20);
-            ctx.lineTo(x - 20, y);
-            ctx.fill();
-          }
-        }
-      }
-
-      // Border gradient
-      const borderGradient = ctx.createLinearGradient(0, 0, 1024, 0);
-      borderGradient.addColorStop(0, saree.borderColor);
-      borderGradient.addColorStop(0.5, saree.accentColor);
-      borderGradient.addColorStop(1, saree.borderColor);
-
-      ctx.fillStyle = borderGradient;
-      
-      // Bottom border (Pallu part)
-      ctx.fillRect(0, 1024 - 150, 1024, 150);
-      
-      // Side borders
-      ctx.fillRect(0, 0, 80, 1024);
-      ctx.fillRect(1024 - 80, 0, 80, 1024);
-      
-      // Thin inner lines
-      ctx.fillStyle = saree.accentColor;
-      ctx.fillRect(90, 0, 10, 1024);
-      ctx.fillRect(1024 - 100, 0, 10, 1024);
-      ctx.fillRect(0, 1024 - 170, 1024, 10);
-    }
-    const tex = new THREE.CanvasTexture(canvas);
-    tex.colorSpace = THREE.SRGBColorSpace;
-    return tex;
-  }, [saree]);
-
-  useFrame((state) => {
-    const time = state.clock.getElapsedTime();
-    if (meshRef.current) {
-      // Elegant slow rotation
-      meshRef.current.rotation.y = Math.sin(time * 0.15) * 0.2;
-      meshRef.current.rotation.z = Math.sin(time * 0.1) * 0.1;
-    }
-    
-    // Animate vertices for a flowing fabric effect
-    if (geomRef.current) {
-      const position = geomRef.current.attributes.position;
-      for (let i = 0; i < position.count; i++) {
-        const x = position.getX(i);
-        const y = position.getY(i);
-        // Create smooth, elegant waves resembling a draping saree
-        const z = Math.sin(x * 1.5 + time * 1.2) * 0.3 + 
-                  Math.cos(y * 1.2 + time * 0.8) * 0.4 +
-                  Math.sin(x * 0.5 + y * 0.5 + time) * 0.2;
-        position.setZ(i, z);
-      }
-      position.needsUpdate = true;
-      geomRef.current.computeVertexNormals();
-    }
-  });
+function SareeFabric2D({ saree }: { saree: SareeData }) {
+  // Staggered gold-threaded floral buttas scattered elegantly on the fabric weave
+  const buttaPositions = [
+    { top: '15%', left: '25%' },
+    { top: '20%', left: '70%' },
+    { top: '40%', left: '20%' },
+    { top: '45%', left: '80%' },
+    { top: '60%', left: '30%' },
+    { top: '65%', left: '70%' },
+  ];
 
   return (
-    <Float speed={1.5} rotationIntensity={0.5} floatIntensity={0.6}>
-      <mesh ref={meshRef} position={[0, 0, 0]} rotation={[-Math.PI / 5, 0, 0]}>
-        <planeGeometry ref={geomRef} args={[4.5, 6, 64, 64]} />
-        <meshPhysicalMaterial 
-          map={texture}
-          metalness={0.4}
-          roughness={0.6}
-          clearcoat={0.2}
-          clearcoatRoughness={0.3}
-          side={THREE.DoubleSide}
-          envMapIntensity={1.5}
-        />
-      </mesh>
-    </Float>
+    <motion.div 
+      className="absolute inset-0 flex flex-col justify-between p-8 overflow-hidden rounded-t-full transition-colors duration-1000"
+      style={{
+        background: `linear-gradient(135deg, ${saree.baseColor} 0%, #FAF6EB 100%)`,
+      }}
+      initial={{ opacity: 0, scale: 0.98 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.98 }}
+      transition={{ duration: 0.8 }}
+    >
+      {/* Linen texture overlay simulating fine woven cloth threads */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-black/5 mix-blend-overlay pointer-events-none" />
+      <div className="absolute inset-0 opacity-10 pointer-events-none mix-blend-multiply" style={{
+        backgroundImage: 'radial-gradient(#4A1521 1px, transparent 1px)',
+        backgroundSize: '8px 8px'
+      }} />
+
+      {/* Repeating fine pattern base */}
+      <div 
+        className="absolute inset-0 opacity-15 pointer-events-none transition-all duration-1000" 
+        style={{
+          backgroundImage: saree.pattern === 'brocade' 
+            ? `radial-gradient(circle at 50% 50%, ${saree.borderColor} 2.5px, transparent 3.5px)` 
+            : saree.pattern === 'geometric'
+            ? `repeating-linear-gradient(45deg, ${saree.accentColor} 0px, ${saree.accentColor} 1.5px, transparent 1.5px, transparent 12px)`
+            : 'none',
+          backgroundSize: '24px 24px'
+        }} 
+      />
+
+      {/* Floating Shimmer Reflection */}
+      <motion.div 
+        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none"
+        animate={{
+          x: ['-100%', '100%'],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 4,
+          ease: "easeInOut",
+          repeatDelay: 1
+        }}
+      />
+
+      {/* Handloom Gold-threaded Florals (Buttas) */}
+      {buttaPositions.map((pos, index) => (
+        <div 
+          key={index} 
+          className="absolute text-[12px] opacity-65 pointer-events-none select-none"
+          style={{ top: pos.top, left: pos.left, color: saree.borderColor }}
+        >
+          ✿
+        </div>
+      ))}
+
+      {/* Symmetrical luxury side borders (Zari / Kasavu laces) */}
+      <div 
+        className="absolute left-0 top-0 bottom-0 w-8 md:w-12 border-r border-double transition-all duration-1000 flex flex-col justify-around py-12 items-center"
+        style={{
+          background: `linear-gradient(to right, ${saree.borderColor}, ${saree.accentColor})`,
+          borderColor: `${saree.accentColor}50`
+        }}
+      >
+        {[...Array(6)].map((_, i) => (
+          <span key={i} className="text-[7px] text-white/55 font-serif">♦</span>
+        ))}
+      </div>
+      <div 
+        className="absolute right-0 top-0 bottom-0 w-8 md:w-12 border-l border-double transition-all duration-1000 flex flex-col justify-around py-12 items-center"
+        style={{
+          background: `linear-gradient(to left, ${saree.borderColor}, ${saree.accentColor})`,
+          borderColor: `${saree.accentColor}50`
+        }}
+      >
+        {[...Array(6)].map((_, i) => (
+          <span key={i} className="text-[7px] text-white/55 font-serif">♦</span>
+        ))}
+      </div>
+
+      {/* Double Gold Pallu Border representing exquisite Kasavu weave */}
+      <div 
+        className="absolute bottom-0 left-0 right-0 h-36 border-t-2 border-double flex flex-col justify-end items-center pb-6 px-12 transition-all duration-1000"
+        style={{
+          background: `linear-gradient(to top, ${saree.borderColor}, ${saree.accentColor})`,
+          borderColor: `${saree.accentColor}80`
+        }}
+      >
+        {/* Intricate golden border work details inside the Pallu */}
+        <div className="w-full h-[1px] bg-white/20 mb-1" />
+        <span className="text-[10px] tracking-[0.3em] uppercase text-white font-semibold text-center select-none font-display">
+          {saree.name} • Royal Archive Weave
+        </span>
+        <div className="w-full h-[1px] bg-white/20 mt-1" />
+      </div>
+
+      {/* Centered Crest customized by pattern */}
+      <div className="my-auto flex flex-col items-center gap-3 relative z-10 select-none animate-pulse">
+        {saree.pattern === 'brocade' ? (
+          <svg className="w-16 h-16" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 54C42.4934 54 51 45.4934 51 35C51 22.5 32 6 32 6C32 6 13 22.5 13 35C13 45.4934 21.5066 54 32 54Z" stroke={saree.borderColor} strokeWidth="1.5" />
+            <path d="M32 16C36 24 44 32 40 42C36 48 28 48 24 42C20 32 28 24 32 16Z" stroke={saree.accentColor} strokeWidth="1" />
+          </svg>
+        ) : saree.pattern === 'geometric' ? (
+          <svg className="w-16 h-16" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 6L16 24H48L32 6Z" stroke={saree.borderColor} strokeWidth="1.5" />
+            <path d="M20 24V48H44V24" stroke={saree.borderColor} strokeWidth="1.5" />
+            <circle cx="32" cy="36" r="6" stroke={saree.borderColor} strokeWidth="1.5" />
+          </svg>
+        ) : (
+          <span className="text-vintage/25 text-5xl leading-none" style={{ color: saree.borderColor }}>⚜</span>
+        )}
+        
+        <span className="text-[9px] tracking-[0.4em] uppercase font-bold text-center" style={{ color: saree.borderColor }}>
+          Handcrafted Splendor
+        </span>
+      </div>
+    </motion.div>
   );
 }
 
 export function About() {
   const [currentSareeIndex, setCurrentSareeIndex] = useState(0);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"]
   });
   
-  const y = useTransform(scrollYProgress, [0, 1], ["-20%", "20%"]);
+  const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
   const handleNext = () => {
     setCurrentSareeIndex((prev) => (prev + 1) % SAREES.length);
@@ -156,12 +176,23 @@ export function About() {
   const currentSaree = SAREES[currentSareeIndex];
 
   return (
-    <section id="about-us" className="py-32 bg-pearl/20 relative overflow-hidden">
+    <section id="about-us" className="py-32 bg-cream/20 relative overflow-hidden">
+      
+      {/* Sabyasachi-Style Symmetrical Section Divider */}
+      <div className="flex flex-col items-center justify-center mb-16 text-center select-none">
+        <span className="text-vintage/30 text-xl md:text-2xl mb-2">❦</span>
+        <h2 className="font-display text-xs md:text-sm tracking-[0.35em] uppercase text-olive font-semibold">
+          THE HOUSE OF ELISWA
+        </h2>
+        <div className="w-16 h-[1px] bg-vintage/20 mt-3"></div>
+      </div>
+
       {/* Decorative background element */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-cream rounded-full mix-blend-multiply filter blur-3xl opacity-50 transform translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
       
       <div className="max-w-7xl mx-auto px-6 md:px-20 grid md:grid-cols-2 gap-16 items-center relative z-10">
         
+        {/* Left Column: Arched Saree Fabric Canvas with Double Border */}
         <motion.div 
           ref={containerRef}
           initial={{ opacity: 0, y: 50 }}
@@ -170,64 +201,59 @@ export function About() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="relative"
         >
-          <div className="h-[600px] w-full bg-cream border border-vintage/20 shadow-2xl shadow-vintage/10 flex items-center justify-center relative overflow-hidden group">
-            <motion.div className="absolute inset-0 z-0 h-[120%] -top-[10%]" style={{ y }}>
-              <Canvas camera={{ position: [0, 0, 7], fov: 45 }}>
-                <ambientLight intensity={0.5} />
-                <directionalLight position={[10, 10, 5]} intensity={1.5} color="#FFFFFF" />
-                <directionalLight position={[-10, -10, -5]} intensity={0.5} color="#CE758C" />
-                <Environment preset="city" />
-                <PresentationControls 
-                  global 
-                  snap={true} 
-                  rotation={[0, 0, 0]} 
-                  polar={[-Math.PI / 8, Math.PI / 8]} 
-                  azimuth={[-Math.PI / 8, Math.PI / 8]}
-                >
-                  <SareeFabric saree={currentSaree} />
-                </PresentationControls>
-              </Canvas>
-            </motion.div>
-            
-            {/* Elegant overlay elements simulating texture */}
-            <div className="absolute inset-0 opacity-10 mix-blend-overlay pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at center, #8B324D 1px, transparent 1px)', backgroundSize: '20px 20px' }}></div>
-            
-            {/* Carousel Controls */}
-            <div className="absolute bottom-8 left-0 right-0 flex justify-between items-center px-8 z-20 pointer-events-none">
-              <button 
-                onClick={handlePrev}
-                className="w-12 h-12 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-vintage hover:bg-vintage hover:text-white transition-colors shadow-lg pointer-events-auto"
-              >
-                <ChevronLeft size={24} />
-              </button>
+          {/* Sabyasachi Archway double-bordered layout */}
+          <div className="h-[600px] w-full bg-cream border-4 border-double border-vintage/30 p-2 shadow-2xl flex items-center justify-center relative overflow-hidden group rounded-t-full">
+            <div className="w-full h-full border border-vintage/15 relative overflow-hidden rounded-t-full">
               
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentSaree.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="bg-white/80 backdrop-blur-md px-6 py-2 rounded-full shadow-lg border border-vintage/10 pointer-events-auto"
+              <motion.div className="absolute inset-0 z-0 h-[110%] -top-[5%] rounded-t-full" style={{ y }}>
+                <AnimatePresence mode="wait">
+                  <SareeFabric2D key={currentSaree.id} saree={currentSaree} />
+                </AnimatePresence>
+              </motion.div>
+              
+              {/* Elegant overlay elements simulating texture */}
+              <div className="absolute inset-0 opacity-15 mix-blend-overlay pointer-events-none rounded-t-full" style={{ backgroundImage: 'radial-gradient(circle at center, #8B324D 1.2px, transparent 1.2px)', backgroundSize: '16px 16px' }}></div>
+              
+              {/* Carousel Controls */}
+              <div className="absolute bottom-8 left-0 right-0 flex justify-between items-center px-8 z-20 pointer-events-none">
+                <button 
+                  onClick={handlePrev}
+                  className="w-10 h-10 rounded-full bg-cream/90 backdrop-blur-md flex items-center justify-center text-vintage hover:bg-vintage hover:text-white border border-vintage/20 transition-all duration-300 shadow-md pointer-events-auto"
                 >
-                  <span className="font-display tracking-wider text-vintage uppercase text-sm">
-                    {currentSaree.name}
-                  </span>
-                </motion.div>
-              </AnimatePresence>
+                  <ChevronLeft size={20} />
+                </button>
+                
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentSaree.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="bg-cream/95 backdrop-blur-md px-5 py-1.5 rounded-full shadow-md border border-vintage/20 pointer-events-auto"
+                  >
+                    <span className="text-[10px] tracking-[0.2em] text-vintage uppercase font-bold">
+                      {currentSaree.name}
+                    </span>
+                  </motion.div>
+                </AnimatePresence>
 
-              <button 
-                onClick={handleNext}
-                className="w-12 h-12 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-vintage hover:bg-vintage hover:text-white transition-colors shadow-lg pointer-events-auto"
-              >
-                <ChevronRight size={24} />
-              </button>
+                <button 
+                  onClick={handleNext}
+                  className="w-10 h-10 rounded-full bg-cream/90 backdrop-blur-md flex items-center justify-center text-vintage hover:bg-vintage hover:text-white border border-vintage/20 transition-all duration-300 shadow-md pointer-events-auto"
+                >
+                  <ChevronRight size={20} />
+                </button>
+              </div>
+              
             </div>
           </div>
+          
           {/* Decorative accents */}
-          <div className="absolute -bottom-6 -right-6 w-32 h-32 border-b-2 border-r-2 border-vintage/30 pointer-events-none"></div>
-          <div className="absolute -top-6 -left-6 w-32 h-32 border-t-2 border-l-2 border-vintage/30 pointer-events-none"></div>
+          <div className="absolute -bottom-4 -right-4 w-24 h-24 border-b border-r border-vintage/20 pointer-events-none"></div>
+          <div className="absolute -top-4 -left-4 w-24 h-24 border-t border-l border-vintage/20 pointer-events-none"></div>
         </motion.div>
 
+        {/* Right Column: Editorial brand narrative */}
         <motion.div 
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -236,21 +262,26 @@ export function About() {
           className="pr-4"
         >
           <div className="flex items-center gap-4 mb-6">
-            <div className="h-[1px] w-12 bg-vintage"></div>
-            <span className="uppercase tracking-widest text-vintage/70 text-sm">Our Story</span>
+            <span className="uppercase tracking-[0.25em] text-olive text-[10px] font-bold">THE FOUNDATION & THE MUSE</span>
+            <div className="h-[1px] flex-1 bg-vintage/15"></div>
           </div>
           
-          <h2 className="font-display text-4xl md:text-5xl mb-10 text-vintage leading-tight">Crafting Heritage</h2>
+          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl mb-10 text-vintage font-semibold leading-[1.15] tracking-wide">
+            CRAFTING HERITAGE:<br/>ELISWA INDIA
+          </h2>
           
-          <div className="text-vintage/80 space-y-8 text-lg font-light leading-relaxed">
-            <p>
-              Born from the visionary eye of Aashitha Wilson, Eliswa is a sanctuary of artisanal luxury—a tribute to classical femininity softly reimagined for the modern world.
+          <div className="text-vintage/85 space-y-6 text-base leading-relaxed font-light">
+            <p className="relative pl-14 pt-1">
+              <span className="absolute left-0 top-0 font-display text-5xl md:text-6xl text-vintage font-bold leading-none select-none border border-vintage/20 p-2 bg-cream/50 shadow-sm rounded-sm">
+                B
+              </span>
+              orn from the visionary eye of lead designer Aashitha Wilson, Eliswa is a sanctuary of Indian luxury. Eliswa India is a passionate tribute to classical femininity, softly reinterpreted with a slow, cinematic elegance for the modern world.
             </p>
             <p>
-              Every bespoke creation is an intimate tactile experience, defined by masterful 3D ribbed textures, elevated embroidery, and the delicate precision of fine spun wire. We weave stories into fabric, ensuring each piece is a unique narrative of its wearer.
+              Every bespoke garment is a profound tactile experience, defined by masterfully draped structures, elevated Zardozi borders, and the delicate precision of fine spun copper and gold threads. We weave oral histories into cloth, creating true wearable poetry.
             </p>
-            <p>
-              Bathed in an inviting, luminous palette of soft golden creams and metallic rose gold, an Eliswa garment is not merely worn; it is felt. It's an embrace of tradition, tailored for the contemporary muse.
+            <p className="italic text-vintage/70 text-sm font-display tracking-wider uppercase pt-4 border-t border-vintage/10">
+              ❦ Bathed in an inviting, luminous palette of soft golden creams, mossy olive greens, and metallic rose gold, an Eliswa weave is not merely worn; it is a legacy. It is an embrace of ancient handlooms, custom-designed for the contemporary muse.
             </p>
           </div>
         </motion.div>
