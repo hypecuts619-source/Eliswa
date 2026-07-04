@@ -55,6 +55,10 @@ export function CartDrawer() {
             </div>
 
             <div className="flex-1 overflow-y-auto p-6">
+              <div className="bg-vintage/5 text-vintage/70 text-xs text-center py-2 mb-6 border border-vintage/10 tracking-widest uppercase">
+                Complimentary Global Shipping on all orders
+              </div>
+              
               {cartItems.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-vintage/50 space-y-4">
                   <ShoppingBag size={48} className="opacity-20" />

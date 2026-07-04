@@ -14,6 +14,10 @@
   --font-logo-text: "Playfair Display", serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: "Montserrat", sans-serif;
   background-color: #FAF6EB;

@@ -141,7 +141,7 @@ export function Hero() {
 
   const active = HERO_CHAPTERS[currentChapter];
 
-  const showWeaveAndCraft = false; // Set to true to unhide the 'Shop by Weave & Craft' section later
+  const showWeaveAndCraft = true; // Set to true to unhide the 'Shop by Weave & Craft' section later
 
   const handleCategoryClick = (category: typeof CRAFT_CATEGORIES[0]) => {
     // Dispatch custom event to Collection component

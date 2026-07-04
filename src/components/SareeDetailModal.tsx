@@ -53,8 +53,10 @@ export function SareeDetailModal({ isOpen, onClose, saree, fabricComponent }: Sa
 
             {/* Image / Fabric Preview Section with Fine Frame */}
             <div className="w-full md:w-1/2 h-1/2 md:h-full bg-cream relative border-b md:border-b-0 md:border-r border-vintage/15 p-4 flex flex-col justify-between">
-              <div className="w-full h-full border border-vintage/10 rounded-t-full relative overflow-hidden">
-                {fabricComponent}
+              <div className="w-full h-full border border-vintage/10 rounded-t-full relative overflow-hidden group/modal-image">
+                <div className="w-full h-full transform transition-transform duration-[1.5s] ease-out group-hover/modal-image:scale-110">
+                  {fabricComponent}
+                </div>
               </div>
               <div className="absolute bottom-6 left-6 text-[9px] font-display tracking-[0.2em] text-vintage/45 uppercase font-bold">
                 ❦ ARCHIVAL WEAVE EXHIBIT
