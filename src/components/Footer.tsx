@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { LegalModal } from './LegalModals';
 import { motion } from 'framer-motion';
+import eliswaIndia from '../assets/Eliswa_India.png';
 
 export function Footer() {
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
@@ -19,7 +20,7 @@ export function Footer() {
         {/* Symmetrical Footer Header in Logo Style */}
         <div className="flex flex-col items-center justify-center text-vintage select-none text-center mb-16">
           <img 
-            src="/Eliswa_India.png" 
+            src={eliswaIndia} 
             alt="Eliswa India" 
             className="h-32 md:h-48 object-contain -mt-4"
           />
