@@ -362,7 +362,7 @@ export function Collection() {
               
               {filteredSarees.length > 0 ? (
                 <>
-                  <motion.div className="absolute inset-0 z-0 h-[110%] -top-[5%] rounded-t-full" style={{ y }}>
+                  <motion.div className="absolute inset-0 z-0 h-[110%] -top-[5%] rounded-t-full transition-transform duration-[2s] ease-out group-hover:scale-110" style={{ y }}>
                     <AnimatePresence mode="wait">
                       <OnamSareeFabric2D key={currentSaree?.id} saree={currentSaree} />
                     </AnimatePresence>
@@ -502,33 +502,37 @@ export function Collection() {
                           setIsModalOpen(true);
                         }
                       }}
-                      className="aspect-[4/3] w-full relative overflow-hidden rounded-t-sm border border-vintage/15 cursor-pointer flex items-center justify-center p-1"
-                      style={{
-                        background: `linear-gradient(135deg, ${saree.baseColor} 0%, #FAF6EB 100%)`
-                      }}
+                      className="aspect-[4/3] w-full relative overflow-hidden rounded-t-sm border border-vintage/15 cursor-pointer p-1 group/fabric"
                     >
-                      {/* Swatch Border Lines */}
-                      <div className="absolute left-0 top-0 bottom-0 w-3 border-r border-vintage/10" style={{ background: `linear-gradient(to right, ${saree.borderColor}, ${saree.accentColor})` }} />
-                      <div className="absolute right-0 top-0 bottom-0 w-3 border-l border-vintage/10" style={{ background: `linear-gradient(to left, ${saree.borderColor}, ${saree.accentColor})` }} />
-                      <div className="absolute bottom-0 left-0 right-0 h-8 border-t border-vintage/15" style={{ background: `linear-gradient(to top, ${saree.borderColor}, ${saree.accentColor})` }} />
-                      
-                      {/* Swatch Pattern */}
                       <div 
-                        className="absolute inset-0 opacity-15 pointer-events-none" 
+                        className="w-full h-full relative transition-transform duration-[1.5s] ease-out group-hover/fabric:scale-125 flex items-center justify-center overflow-hidden"
                         style={{
-                          backgroundImage: saree.pattern === 'brocade'
-                            ? `radial-gradient(circle at 50% 50%, ${saree.borderColor} 2px, transparent 3px)`
-                            : saree.pattern === 'geometric'
-                            ? `repeating-linear-gradient(45deg, ${saree.accentColor} 0px, ${saree.accentColor} 1px, transparent 1px, transparent 8px)`
-                            : 'none',
-                          backgroundSize: '16px 16px'
-                        }} 
-                      />
-                      
-                      <span className="text-xl opacity-35 z-10" style={{ color: saree.borderColor }}>⚜</span>
+                          background: `linear-gradient(135deg, ${saree.baseColor} 0%, #FAF6EB 100%)`
+                        }}
+                      >
+                        {/* Swatch Border Lines */}
+                        <div className="absolute left-0 top-0 bottom-0 w-3 border-r border-vintage/10" style={{ background: `linear-gradient(to right, ${saree.borderColor}, ${saree.accentColor})` }} />
+                        <div className="absolute right-0 top-0 bottom-0 w-3 border-l border-vintage/10" style={{ background: `linear-gradient(to left, ${saree.borderColor}, ${saree.accentColor})` }} />
+                        <div className="absolute bottom-0 left-0 right-0 h-8 border-t border-vintage/15" style={{ background: `linear-gradient(to top, ${saree.borderColor}, ${saree.accentColor})` }} />
+                        
+                        {/* Swatch Pattern */}
+                        <div 
+                          className="absolute inset-0 opacity-15 pointer-events-none" 
+                          style={{
+                            backgroundImage: saree.pattern === 'brocade'
+                              ? `radial-gradient(circle at 50% 50%, ${saree.borderColor} 2px, transparent 3px)`
+                              : saree.pattern === 'geometric'
+                              ? `repeating-linear-gradient(45deg, ${saree.accentColor} 0px, ${saree.accentColor} 1px, transparent 1px, transparent 8px)`
+                              : 'none',
+                            backgroundSize: '16px 16px'
+                          }} 
+                        />
+                        
+                        <span className="text-xl opacity-35 z-10" style={{ color: saree.borderColor }}>⚜</span>
+                      </div>
                       
                       {/* Zoom Indicator */}
-                      <div className="absolute inset-0 bg-vintage/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <div className="absolute inset-0 bg-vintage/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
                         <span className="bg-cream/90 backdrop-blur-sm border border-vintage/20 text-vintage text-[8px] tracking-[0.2em] uppercase font-bold px-3 py-1 rounded-full shadow-sm flex items-center gap-1">
                           <Expand size={10} /> EXAMINE
                         </span>
