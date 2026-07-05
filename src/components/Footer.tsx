@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { LegalModal } from './LegalModals';
 import { motion } from 'framer-motion';
-import eliswaIndia from '../assets/footer_brand.png';
+import eliswaIndia from '../assets/brand_india.webp';
 
 export function Footer() {
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
@@ -22,7 +22,7 @@ export function Footer() {
           <img 
             src={eliswaIndia} 
             alt="Eliswa India" 
-            style={{ border: "2px solid red", minWidth: "150px", minHeight: "100px", backgroundColor: "rgba(0,0,0,0.1)" }} className="h-32 md:h-48 object-contain -mt-4"
+            className="h-32 md:h-48 object-contain -mt-4"
           />
           <span className="text-[10px] md:text-xs tracking-[0.4em] uppercase text-olive font-medium mt-2">
             You are rare
