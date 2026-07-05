@@ -27,7 +27,7 @@ export function Navbar() {
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: 'easeOut' }}
       >
-        <div className={`mx-auto pointer-events-auto transition-all duration-500 bg-cream/95 backdrop-blur-md border border-vintage/15 shadow-sm flex items-center justify-between ${
+        <div className={`mx-auto pointer-events-auto transition-all duration-500 bg-cream/95 backdrop-blur-md border border-vintage/15 shadow-premium flex items-center justify-between ${
           isScrolled 
             ? 'max-w-6xl rounded-full py-2 px-6 shadow-lg' 
             : 'max-w-7xl rounded-sm py-2 px-4 md:px-8 border-t-0'
@@ -44,41 +44,36 @@ export function Navbar() {
 
           {/* Center: Symmetrical Editorial Desktop Menu */}
           <div className="hidden md:flex items-center justify-center gap-6 lg:gap-10 text-[10px] lg:text-[11px] tracking-[0.25em] uppercase font-semibold text-[#cf958f]">
-            <a href="#home" className="hover:text-[#a86058] transition-colors relative group py-1">
+            <a href="#home" className="premium-underline hover:text-[#a86058] transition-colors relative group py-1">
               The House
-              <span className="absolute left-0 bottom-0 w-0 h-[1.5px] bg-[#cf958f]/60 transition-all group-hover:w-full"></span>
             </a>
             <span className="text-[#cf958f]/40 text-xs select-none">•</span>
-            <a href="#collection" className="hover:text-[#a86058] transition-colors relative group py-1">
+            <a href="#collection" className="premium-underline hover:text-[#a86058] transition-colors relative group py-1">
               The Collection
-              <span className="absolute left-0 bottom-0 w-0 h-[1.5px] bg-[#cf958f]/60 transition-all group-hover:w-full"></span>
             </a>
             <span className="text-[#cf958f]/40 text-xs select-none">•</span>
-            <a href="#about-us" className="hover:text-[#a86058] transition-colors relative group py-1">
+            <a href="#about-us" className="premium-underline hover:text-[#a86058] transition-colors relative group py-1">
               Our Story
-              <span className="absolute left-0 bottom-0 w-0 h-[1.5px] bg-[#cf958f]/60 transition-all group-hover:w-full"></span>
             </a>
             <span className="text-[#cf958f]/40 text-xs select-none">•</span>
-            <a href="#client-stories" className="hover:text-[#a86058] transition-colors relative group py-1">
+            <a href="#client-stories" className="premium-underline hover:text-[#a86058] transition-colors relative group py-1">
               Patrons
-              <span className="absolute left-0 bottom-0 w-0 h-[1.5px] bg-[#cf958f]/60 transition-all group-hover:w-full"></span>
             </a>
             <span className="text-[#cf958f]/40 text-xs select-none">•</span>
-            <a href="#contact" className="hover:text-[#a86058] transition-colors relative group py-1">
+            <a href="#contact" className="premium-underline hover:text-[#a86058] transition-colors relative group py-1">
               Atelier Inquiries
-              <span className="absolute left-0 bottom-0 w-0 h-[1.5px] bg-[#cf958f]/60 transition-all group-hover:w-full"></span>
             </a>
           </div>
 
           {/* Right: Cart & Mobile Menu Button */}
           <div className="flex items-center gap-4">
             <button 
-              className="text-[#cf958f] relative hover:text-[#a86058] transition-all duration-300 p-2 border border-[#cf958f]/20 hover:border-[#cf958f]/50 rounded-full"
+              className="text-[#cf958f] relative hover:text-[#a86058] transition-all duration-300 p-2 border border-[#cf958f]/20 hover:border-[#cf958f]/50 rounded-full hover:bg-rose/5"
               onClick={() => setIsCartOpen(true)}
             >
               <ShoppingBag size={20} className="stroke-[1.5]" />
               {cartTotalCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#cf958f] text-cream text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-cream">
+                <span className="absolute -top-1 -right-1 bg-[#cf958f] text-cream text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-cream shadow-sm">
                   {cartTotalCount}
                 </span>
               )}
@@ -86,7 +81,7 @@ export function Navbar() {
 
             {/* Mobile Menu Toggle */}
             <button 
-              className="md:hidden text-[#cf958f] p-2"
+              className="md:hidden text-[#cf958f] p-2 hover:bg-rose/5 rounded-full transition-colors"
               onClick={() => setIsOpen(!isOpen)}
             >
               {isOpen ? <X size={20} /> : <Menu size={20} />}
@@ -103,7 +98,7 @@ export function Navbar() {
         animate={{ opacity: isOpen ? 1 : 0, pointerEvents: isOpen ? 'auto' : 'none' }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
       >
-        <div className="border border-[#cf958f]/20 p-8 w-full max-w-md h-full max-h-[80vh] flex flex-col items-center justify-center space-y-8 relative">
+        <div className="border border-[#cf958f]/20 p-8 w-full max-w-md h-full max-h-[80vh] flex flex-col items-center justify-center space-y-8 relative shadow-premium">
           <img 
             src="/Eliswa_logo.png" 
             alt="EW Logo" 
@@ -122,7 +117,7 @@ export function Navbar() {
             <a 
               key={item.label} 
               href={item.href} 
-              className="text-lg font-display uppercase tracking-widest text-[#cf958f] hover:text-[#a86058] transition-colors"
+              className="text-lg font-display uppercase tracking-widest text-[#cf958f] hover:text-[#a86058] transition-colors premium-underline"
               onClick={() => setIsOpen(false)}
             >
               {item.label}
