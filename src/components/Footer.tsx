@@ -14,7 +14,7 @@ export function Footer() {
           <img 
             src="/Eliswa_India.png" 
             alt="Eliswa India" 
-            className="h-32 md:h-48 object-contain -mt-4 mix-blend-multiply"
+            className="h-32 md:h-48 object-contain -mt-4"
           />
           <span className="text-[10px] md:text-xs tracking-[0.4em] uppercase text-olive font-medium mt-2">
             You are rare
