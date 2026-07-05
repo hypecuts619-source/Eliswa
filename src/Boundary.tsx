@@ -10,7 +10,7 @@ interface State {
   errorInfo: ErrorInfo | null;
 }
 
-export class ErrorBoundary extends Component<Props, State> {
+export class Boundary extends Component<Props, State> {
   public state: State = {
     hasError: false,
     error: null,
