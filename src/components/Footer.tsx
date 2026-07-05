@@ -22,7 +22,7 @@ export function Footer() {
           <img 
             src={eliswaIndia} 
             alt="Eliswa India" 
-            className="h-32 md:h-48 object-contain -mt-4"
+            style={{ border: "2px solid red", minWidth: "150px", minHeight: "100px", backgroundColor: "rgba(0,0,0,0.1)" }} className="h-32 md:h-48 object-contain -mt-4"
           />
           <span className="text-[10px] md:text-xs tracking-[0.4em] uppercase text-olive font-medium mt-2">
             You are rare

@@ -39,7 +39,7 @@ export function Navbar() {
             <img 
               src={eliswaLogo} 
               alt="EW Logo" 
-              className="h-16 md:h-20 transition-transform duration-300 group-hover/logo:scale-[1.02] object-contain"
+              style={{ border: "2px solid red", minWidth: "100px", minHeight: "50px", backgroundColor: "rgba(0,0,0,0.1)" }} className="h-16 md:h-20 transition-transform duration-300 group-hover/logo:scale-[1.02] object-contain"
             />
           </a>
 
@@ -108,7 +108,7 @@ export function Navbar() {
           <img 
             src={eliswaLogo} 
             alt="EW Logo" 
-            className="absolute top-5 h-16 object-contain" 
+            style={{ border: "2px solid red", minWidth: "100px", minHeight: "50px", backgroundColor: "rgba(0,0,0,0.1)" }} className="absolute top-5 h-16 object-contain" 
           />
           
           <span className="text-[#cf958f]/40 text-2xl">❦</span>
