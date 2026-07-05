@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ShoppingBag } from 'lucide-react';
-import { useEffect } from 'react';
+import { X, ShoppingBag, Sparkles, MessageSquare } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useCart } from '../context/CartContext';
 
 interface SareeDetailModalProps {
@@ -12,17 +12,52 @@ interface SareeDetailModalProps {
 
 export function SareeDetailModal({ isOpen, onClose, saree, fabricComponent }: SareeDetailModalProps) {
   const { addToCart } = useCart();
+  const [isStylistOpen, setIsStylistOpen] = useState(false);
+  const [stylistQuery, setStylistQuery] = useState("");
+  const [stylistResponse, setStylistResponse] = useState("");
+  const [isStylistLoading, setIsStylistLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
+      setIsStylistOpen(false);
+      setStylistResponse("");
+      setStylistQuery("");
     }
     return () => {
       document.body.style.overflow = 'unset';
     };
   }, [isOpen]);
+
+  const handleAskStylist = async () => {
+    if (!stylistQuery.trim()) return;
+    setIsStylistLoading(true);
+    setStylistResponse("");
+
+    try {
+      const res = await fetch("/api/stylist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sareeName: saree.name,
+          sareeDetails: `Base color: ${saree.baseColor}, Accent: ${saree.accentColor}, Pattern: ${saree.pattern}`,
+          query: stylistQuery
+        })
+      });
+      const data = await res.json();
+      if (data.suggestion) {
+        setStylistResponse(data.suggestion);
+      } else {
+        setStylistResponse("The atelier is currently unavailable. Please try again later.");
+      }
+    } catch (error) {
+      setStylistResponse("The atelier is currently unavailable. Please try again later.");
+    } finally {
+      setIsStylistLoading(false);
+    }
+  };
 
   if (!saree) return null;
 
@@ -111,12 +146,67 @@ export function SareeDetailModal({ isOpen, onClose, saree, fabricComponent }: Sa
                   ADD TO SELECTION
                 </button>
                 <button 
-                  onClick={onClose}
-                  className="flex-1 px-6 py-3.5 border border-vintage/30 text-vintage hover:bg-vintage hover:text-white transition-all duration-300 tracking-[0.2em] uppercase text-[10px] font-bold text-center bg-cream/20"
+                  onClick={() => setIsStylistOpen(!isStylistOpen)}
+                  className={`flex-1 px-6 py-3.5 border transition-all duration-300 tracking-[0.2em] uppercase text-[10px] font-bold flex items-center justify-center gap-2 ${isStylistOpen ? 'bg-vintage text-white border-vintage/30 shadow-md' : 'border-vintage/30 text-vintage hover:bg-vintage hover:text-white shadow-sm'}`}
                 >
-                  CLOSE VIEW
+                  <Sparkles size={14} className="stroke-[1.5]" />
+                  VIRTUAL STYLIST
                 </button>
               </div>
+
+              <AnimatePresence>
+                {isStylistOpen && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                    animate={{ opacity: 1, height: 'auto', marginTop: '1rem' }}
+                    exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="border border-vintage/20 bg-cream/50 p-4 shadow-inner">
+                      <div className="flex items-center gap-2 mb-3 text-vintage">
+                        <MessageSquare size={14} />
+                        <span className="font-display tracking-[0.1em] text-[10px] uppercase font-bold">Ask the Atelier</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <input 
+                          type="text" 
+                          value={stylistQuery}
+                          onChange={(e) => setStylistQuery(e.target.value)}
+                          placeholder="e.g. What jewelry pairs well with this for a wedding?"
+                          className="flex-1 bg-white border border-vintage/20 px-3 py-2 text-xs text-vintage outline-none focus:border-vintage/50 transition-colors"
+                          onKeyDown={(e) => e.key === 'Enter' && handleAskStylist()}
+                        />
+                        <button 
+                          onClick={handleAskStylist}
+                          disabled={isStylistLoading || !stylistQuery.trim()}
+                          className="bg-vintage text-white px-4 py-2 text-[10px] uppercase tracking-widest hover:bg-vintage/90 disabled:opacity-50 transition-colors"
+                        >
+                          {isStylistLoading ? 'CONSULTING...' : 'ASK'}
+                        </button>
+                      </div>
+                      
+                      <AnimatePresence>
+                        {stylistResponse && (
+                          <motion.div 
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="mt-4 p-4 border-l-2 border-vintage/30 bg-white/50 text-xs text-vintage/90 leading-relaxed font-light italic"
+                          >
+                            "{stylistResponse}"
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <button 
+                onClick={onClose}
+                className="mt-4 w-full px-6 py-3 border-t border-b border-vintage/15 text-vintage/70 hover:text-vintage hover:bg-vintage/5 transition-all duration-300 tracking-[0.2em] uppercase text-[10px] font-bold text-center"
+              >
+                CLOSE VIEW
+              </button>
             </div>
           </motion.div>
         </motion.div>

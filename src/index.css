@@ -7,7 +7,6 @@
   --color-vintage: #4A1521;
   --color-pearl: #F5EBE6;
   --color-olive: #5E6032;
-  --color-gold: #D4AF37;
   
   --font-display: "Playfair Display", serif;
   --font-body: "Montserrat", sans-serif;
@@ -24,19 +23,8 @@ body {
   background-color: #FAF6EB;
   color: #4A1521;
   overflow-x: hidden;
-  letter-spacing: 0.02em;
 }
 
-/* Premium Typography Enhancements */
-.font-display {
-  letter-spacing: 0.05em;
-}
-
-.tracking-premium {
-  letter-spacing: 0.15em;
-}
-
-/* Rose Gold Metallic Text */
 .rose-gold-metallic {
   background: linear-gradient(
     135deg,
@@ -53,33 +41,6 @@ body {
   display: inline-block;
 }
 
-/* Gold Accent Text */
-.gold-accent {
-  color: #D4AF37;
-  text-shadow: 0 1px 2px rgba(212, 175, 55, 0.3);
-}
-
-/* Premium Hover Underline Animation */
-.premium-underline {
-  position: relative;
-}
-
-.premium-underline::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #C1838F, transparent);
-  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.premium-underline:hover::after {
-  width: 100%;
-}
-
-/* Saree Color Flow Animation */
 @keyframes saree-color-flow {
   0% { background-position: 0% 0%; }
   100% { background-position: 200% 200%; }
@@ -88,27 +49,6 @@ body {
 @keyframes saree-shadow-flow {
   0% { background-position: 0% 0%, 0% 0%; }
   100% { background-position: 200% 200%, 150% 150%; }
-}
-
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .bg-cloth-3d {
@@ -152,139 +92,5 @@ body {
   animation: saree-shadow-flow 25s ease-in-out infinite alternate;
   mix-blend-mode: soft-light;
   pointer-events: none;
-}
-
-/* Premium Card Shadows */
-.shadow-premium {
-  box-shadow: 
-    0 4px 6px -1px rgba(74, 21, 33, 0.05),
-    0 2px 4px -1px rgba(74, 21, 33, 0.03),
-    0 0 0 1px rgba(74, 21, 33, 0.05);
-}
-
-.shadow-premium-hover {
-  transition: box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.shadow-premium-hover:hover {
-  box-shadow: 
-    0 20px 25px -5px rgba(74, 21, 33, 0.1),
-    0 10px 10px -5px rgba(74, 21, 33, 0.04),
-    0 0 0 1px rgba(74, 21, 33, 0.08);
-}
-
-/* Ornamental Divider */
-.ornamental-divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  color: #C1838F;
-  opacity: 0.6;
-}
-
-.ornamental-divider::before,
-.ornamental-divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, currentColor, transparent);
-}
-
-/* Loading Shimmer Effect */
-.shimmer-loading {
-  background: linear-gradient(
-    90deg,
-    #FAF6EB 0%,
-    #F5EBE6 50%,
-    #FAF6EB 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-}
-
-/* Scroll Progress Indicator */
-.scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #C1838F, #D4AF37, #4A1521);
-  z-index: 100;
-  transition: width 0.1s ease-out;
-}
-
-/* Custom Cursor Dot */
-.cursor-dot {
-  position: fixed;
-  width: 8px;
-  height: 8px;
-  background: #C1838F;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: multiply;
-  transition: transform 0.15s ease-out;
-}
-
-.cursor-dot-follow {
-  position: fixed;
-  width: 40px;
-  height: 40px;
-  border: 1px solid rgba(193, 131, 143, 0.3);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  transition: transform 0.3s ease-out, border-color 0.3s ease;
-}
-
-/* Image Zoom on Hover */
-.image-zoom-container {
-  overflow: hidden;
-}
-
-.image-zoom-container img {
-  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.image-zoom-container:hover img {
-  transform: scale(1.05);
-}
-
-/* Arched Frame Premium */
-.arched-frame {
-  border-radius: 200px 200px 0 0;
-  border: 3px double rgba(74, 21, 33, 0.3);
-  box-shadow: 
-    0 25px 50px -12px rgba(74, 21, 33, 0.15),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-}
-
-/* Glassmorphism Premium */
-.glass-premium {
-  background: rgba(250, 246, 235, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(74, 21, 33, 0.1);
-}
-
-/* Badge Styles */
-.badge-limited {
-  background: linear-gradient(135deg, #4A1521 0%, #6B2030 100%);
-  color: #FAF6EB;
-  font-size: 0.625rem;
-  letter-spacing: 0.2em;
-  padding: 0.375rem 0.75rem;
-  border-radius: 2px;
-}
-
-/* Smooth entrance animations */
-.animate-enter {
-  animation: fade-in-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-.animate-enter-delayed {
-  animation: fade-in-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
-  opacity: 0;
 }
 

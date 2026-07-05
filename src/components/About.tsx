@@ -179,13 +179,19 @@ export function About() {
     <section id="about-us" className="py-32 bg-cream/20 relative overflow-hidden">
       
       {/* Sabyasachi-Style Symmetrical Section Divider */}
-      <div className="flex flex-col items-center justify-center mb-16 text-center select-none">
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="flex flex-col items-center justify-center mb-16 text-center select-none"
+      >
         <span className="text-vintage/30 text-xl md:text-2xl mb-2">❦</span>
         <h2 className="font-display text-xs md:text-sm tracking-[0.35em] uppercase text-olive font-semibold">
           THE HOUSE OF ELISWA
         </h2>
         <div className="w-16 h-[1px] bg-vintage/20 mt-3"></div>
-      </div>
+      </motion.div>
 
       {/* Decorative background element */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-cream rounded-full mix-blend-multiply filter blur-3xl opacity-50 transform translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>

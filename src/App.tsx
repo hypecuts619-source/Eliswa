@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Collection } from './components/Collection';
@@ -16,28 +16,9 @@ import { CartProvider } from './context/CartContext';
 import { CartDrawer } from './components/CartDrawer';
 
 export default function App() {
-  const [scrollProgress, setScrollProgress] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = (window.scrollY / totalHeight) * 100;
-      setScrollProgress(progress);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
     <CartProvider>
       <main className="relative min-h-screen text-vintage font-body overflow-x-hidden selection:bg-rose selection:text-white bg-transparent">
-        {/* Scroll Progress Indicator */}
-        <div 
-          className="scroll-progress"
-          style={{ width: `${scrollProgress}%` }}
-        />
-        
         {/* 3D Cloth Waving Global Background */}
         <svg width="0" height="0" className="hidden absolute">
           <filter id="cloth-wave" x="-20%" y="-20%" width="140%" height="140%">

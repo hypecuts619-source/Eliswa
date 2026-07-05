@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { LegalModal } from './LegalModals';
+import { motion } from 'framer-motion';
 
 export function Footer() {
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
@@ -7,7 +8,13 @@ export function Footer() {
 
   return (
     <footer id="contact" className="relative pt-32 pb-16 px-6 md:px-20 border-t border-vintage/15 overflow-hidden">
-      <div className="max-w-7xl mx-auto flex flex-col items-center relative z-10">
+      <motion.div 
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="max-w-7xl mx-auto flex flex-col items-center relative z-10"
+      >
         
         {/* Symmetrical Footer Header in Logo Style */}
         <div className="flex flex-col items-center justify-center text-vintage select-none text-center mb-16">
@@ -60,7 +67,7 @@ export function Footer() {
           </div>
         </div>
 
-      </div>
+      </motion.div>
 
       {/* Modals */}
       <LegalModal

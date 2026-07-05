@@ -167,7 +167,7 @@ export function Hero() {
       <div 
         ref={containerRef}
         onClick={() => document.getElementById('collection')?.scrollIntoView({ behavior: 'smooth' })}
-        className="relative w-full h-[60vh] sm:h-[72vh] md:h-[80vh] lg:h-[84vh] border-b border-vintage/15 overflow-hidden bg-vintage/5 cursor-pointer group image-zoom-container"
+        className="relative w-full h-[60vh] sm:h-[72vh] md:h-[80vh] lg:h-[84vh] border-b border-vintage/15 overflow-hidden bg-vintage/5 cursor-pointer group"
       >
         
         {/* Large Campaign Slideshow */}
@@ -184,7 +184,7 @@ export function Hero() {
               src={active.imageUrl}
               alt={active.title}
               style={{ y }}
-              className="w-full h-[130%] absolute -top-[15%] object-cover brightness-[0.93] contrast-[1.02] group-hover:scale-105 transition-transform duration-[10s] ease-out"
+              className="w-full h-[130%] absolute -top-[15%] object-cover brightness-[0.93] contrast-[1.02] group-hover:scale-105 transition-transform duration-10000 ease-out"
               referrerPolicy="no-referrer"
             />
           </motion.div>
@@ -216,7 +216,7 @@ export function Hero() {
             e.stopPropagation();
             handlePrev();
           }}
-          className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-white/20 bg-black/15 hover:bg-white hover:text-vintage hover:border-white transition-all duration-300 flex items-center justify-center text-white focus:outline-none z-30 cursor-pointer backdrop-blur-xs shadow-premium"
+          className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-white/20 bg-black/15 hover:bg-white hover:text-vintage hover:border-white transition-all duration-300 flex items-center justify-center text-white focus:outline-none z-30 cursor-pointer backdrop-blur-xs"
           aria-label="Previous banner"
         >
           <ChevronLeft size={18} />
@@ -227,7 +227,7 @@ export function Hero() {
             e.stopPropagation();
             handleNext();
           }}
-          className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-white/20 bg-black/15 hover:bg-white hover:text-vintage hover:border-white transition-all duration-300 flex items-center justify-center text-white focus:outline-none z-30 cursor-pointer backdrop-blur-xs shadow-premium"
+          className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-white/20 bg-black/15 hover:bg-white hover:text-vintage hover:border-white transition-all duration-300 flex items-center justify-center text-white focus:outline-none z-30 cursor-pointer backdrop-blur-xs"
           aria-label="Next banner"
         >
           <ChevronRight size={18} />
@@ -236,7 +236,7 @@ export function Hero() {
         {/* Slide Chapter Indicators at bottom of banner */}
         <div 
           onClick={(e) => e.stopPropagation()}
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 glass-premium px-5 py-2.5 rounded-full shadow-premium"
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 bg-cream/95 backdrop-blur-md border border-vintage/15 px-5 py-2.5 rounded-full shadow-md"
         >
           <div className="flex items-center gap-2">
             {HERO_CHAPTERS.map((chapter, index) => (

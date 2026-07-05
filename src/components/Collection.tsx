@@ -240,13 +240,19 @@ export function Collection() {
     <section id="collection" className="py-32 px-6 md:px-20 max-w-7xl mx-auto">
       
       {/* Sabyasachi-Style Symmetrical Section Divider */}
-      <div className="flex flex-col items-center justify-center mb-16 text-center select-none">
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="flex flex-col items-center justify-center mb-16 text-center select-none"
+      >
         <span className="text-vintage/30 text-xl md:text-2xl mb-2">❦</span>
         <h2 className="font-display text-xs md:text-sm tracking-[0.35em] uppercase text-olive font-semibold">
           THE ARTISANAL CHRONICLES
         </h2>
         <div className="w-16 h-[1px] bg-vintage/20 mt-3"></div>
-      </div>
+      </motion.div>
 
       {/* Filter Bar - Classical Editorial Style */}
       <motion.div 
@@ -444,7 +450,13 @@ export function Collection() {
 
       {/* Editorial Catalog Grid Section */}
       <div className="mt-32 pt-20 border-t border-vintage/15">
-        <div className="flex flex-col items-center justify-center text-center mb-16 select-none">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="flex flex-col items-center justify-center text-center mb-16 select-none"
+        >
           <span className="text-vintage/30 text-xl md:text-2xl mb-2">⚜</span>
           <h2 className="font-display text-xs md:text-sm tracking-[0.35em] uppercase text-olive font-semibold">
             THE CATALOGUE OF MASTERWORKS
@@ -456,7 +468,7 @@ export function Collection() {
             SELECT A MASTERPIECE TO INSPECT TEXTURES OR SECURE A DRAPE
           </p>
           <div className="w-16 h-[1px] bg-vintage/20 mt-4"></div>
-        </div>
+        </motion.div>
 
         {filteredSarees.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
