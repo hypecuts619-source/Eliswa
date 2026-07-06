@@ -10,6 +10,7 @@ async function startServer() {
   app.use(express.json());
   app.use((req, res, next) => { console.log(req.method, req.url); next(); });
 
+  app.get("/google15107b17e9305211.html", (req, res) => { res.send("google-site-verification: google15107b17e9305211.html"); });
   // API Routes
   app.post("/api/stylist", async (req, res) => {
     try {
