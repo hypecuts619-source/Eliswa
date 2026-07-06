@@ -11,6 +11,7 @@ async function startServer() {
   app.use((req, res, next) => { console.log(req.method, req.url); next(); });
 
   app.get("/google15107b17e9305211.html", (req, res) => { res.send("google-site-verification: google15107b17e9305211.html"); });
+  app.get("/sitemap.xml", (req, res) => { res.type("application/xml"); res.sendFile(path.join(process.cwd(), "public", "sitemap.xml")); });
   // API Routes
   app.post("/api/stylist", async (req, res) => {
     try {
