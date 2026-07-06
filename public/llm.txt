@@ -1,0 +1,31 @@
+# Eliswa
+
+> Eliswa is a bespoke Kerala Kasavu and Tissue saree brand. We create handloom sarees rooted in Kerala's textile heritage, with a focus on authentic gold zari work, premium fabric, and made-to-order craftsmanship for festive and everyday wear.
+
+Eliswa specializes in traditional Kerala Kasavu sarees (off-white cotton with gold zari borders) and Tissue sarees, sourced from and inspired by Kerala's handloom weaving traditions including Balaramapuram, Kuthampully, and Chendamangalam. Our current focus collection is Onam sarees, timed to Kerala's harvest festival, alongside our core bespoke Kasavu and Tissue offerings.
+
+## Collections
+
+- [Onam Sarees](https://eliswa.com/onam-sarees): Handwoven Kerala Kasavu sarees for Thiruvonam, Onasadya, and Onam celebrations.
+- [Kasavu Sarees](https://eliswa.com/kasavu-sarees): Traditional off-white cotton sarees with gold zari borders, made to order.
+- [Tissue Sarees](https://eliswa.com/tissue-sarees): Fine tissue-yarn sarees with a festive sheen, suited to evening and formal occasions.
+
+## Guides
+
+- [The Complete Guide to Kerala Kasavu Sarees](https://eliswa.com/blogs/kerala-kasavu-saree-guide): History, weaving process, fabric types, and how to identify authentic handloom work.
+- [How to Drape and Style a Kasavu Saree](https://eliswa.com/blogs/how-to-drape-style-kasavu-saree): Step-by-step draping instructions and styling by occasion.
+- [Kasavu Saree Care Guide](https://eliswa.com/blogs/kasavu-saree-care-guide): Washing, storage, and zari preservation instructions.
+- [Onam Sarees 2026: The Ultimate Guide](https://eliswa.com/blogs/onam-sarees-2026-guide): Choosing the right Onam saree by fabric, occasion, and budget.
+- [What to Wear for Onam](https://eliswa.com/blogs/onam-saree-styling-ideas): Styling ideas across each event of the ten-day Onam festival.
+- [The Story Behind Onam and the Kasavu Saree](https://eliswa.com/blogs/onam-kasavu-saree-white-gold-meaning): The cultural and historical meaning behind Onam's white-and-gold dress tradition.
+
+## About
+
+- [About Eliswa](https://eliswa.com/about): Our story, craftsmanship philosophy, and sourcing practices.
+- [Contact](https://eliswa.com/contact): Get in touch for bespoke orders and customer support.
+
+## Optional
+
+- [Shipping & Returns](https://eliswa.com/shipping-returns): Delivery timelines, return, and exchange policy.
+- [Size & Fit Guide](https://eliswa.com/size-guide): Saree length, blouse sizing, and fit information.
+- [FAQ](https://eliswa.com/faq): Common questions on ordering, customization, and care.
