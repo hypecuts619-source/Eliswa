@@ -170,9 +170,9 @@ function OnamSareeFabric2D({ saree }: { saree: OnamSareeData | undefined }) {
   );
 }
 
-export function Collection() {
+export function Collection({ defaultCategory = null }: { defaultCategory?: string | null }) {
   const { addToCart } = useCart();
-  const [selectedMaterial, setSelectedMaterial] = useState<string | null>(null);
+  const [selectedMaterial, setSelectedMaterial] = useState<string | null>(defaultCategory);
   const [selectedOccasion, setSelectedOccasion] = useState<string | null>(null);
 
   useEffect(() => {
@@ -191,6 +191,12 @@ export function Collection() {
     return () => window.removeEventListener('filter-sarees', handleCustomFilter);
   }, []);
 
+  useEffect(() => {
+    if (defaultCategory !== undefined) {
+      setSelectedMaterial(defaultCategory);
+    }
+  }, [defaultCategory]);
+  
   const filteredSarees = useMemo(() => {
     return ONAM_SAREES.filter(saree => {
       const matchMaterial = selectedMaterial ? saree.material === selectedMaterial : true;

@@ -1,30 +1,77 @@
 const fs = require('fs');
+let content = fs.readFileSync('src/App.tsx', 'utf8');
 
-let content = fs.readFileSync('src/App.tsx', 'utf-8');
+const targetContent = `  const renderContent = () => {
+    if (currentPath === '/onam-sarees') {
+      return <OnamSarees />;
+    }
+    
+    if (currentPath === '/journal') {
+      return <Journal />;
+    }
+    
+    if (currentPath.startsWith('/blogs/')) {
+      return <BlogPost slug={currentPath} />;
+    }
 
-content = content.replace(
-  "import { CartDrawer } from './components/CartDrawer';",
-  "import { CartDrawer } from './components/CartDrawer';\nimport { OnamSarees } from './components/OnamSarees';"
-);
+    // Default home page
+    return (
+      <>
+        <Hero />
+        <Collection />
+        <About />
+      </>
+    );
+  };`;
 
-content = content.replace(
-  "import { useState } from 'react';",
-  "import { useState, useEffect } from 'react';"
-);
+const replacementContent = `  const renderContent = () => {
+    if (currentPath === '/onam-sarees' || currentPath === '/kasavu-sarees' || currentPath === '/tissue-sarees') {
+      const titleMap: Record<string, string> = {
+        '/onam-sarees': 'Onam Sarees – Handwoven Kerala Kasavu Sarees for Thiruvonam',
+        '/kasavu-sarees': 'Kasavu Sarees – Traditional Off-White Cotton Sarees',
+        '/tissue-sarees': 'Tissue Sarees – Fine Metallic Tissue Weaves'
+      };
+      
+      // Update document title manually
+      document.title = titleMap[currentPath] + " | Eliswa India";
 
-content = content.replace(
-  "export default function App() {\n  return (",
-  "export default function App() {\n  const [currentPath, setCurrentPath] = useState(window.location.pathname);\n\n  useEffect(() => {\n    const handleLocationChange = () => setCurrentPath(window.location.pathname);\n    window.addEventListener('popstate', handleLocationChange);\n    return () => window.removeEventListener('popstate', handleLocationChange);\n  }, []);\n\n  return ("
-);
+      return (
+        <div className="pt-24 pb-16">
+          <h1 className="sr-only">{titleMap[currentPath]}</h1>
+          <Collection />
+        </div>
+      );
+    }
+    
+    if (currentPath === '/journal') {
+      return <Journal />;
+    }
+    
+    if (currentPath.startsWith('/blogs/')) {
+      return <BlogPost slug={currentPath} />;
+    }
 
-content = content.replace(
-  '<h1 className="sr-only">Bespoke Kerala Kasavu & Onam Sarees, Handwoven for You</h1>',
-  '{currentPath !== \'/onam-sarees\' && <h1 className="sr-only">Bespoke Kerala Kasavu & Onam Sarees, Handwoven for You</h1>}'
-);
+    if (pageContents[currentPath]) {
+      // Update document title manually
+      document.title = pageContents[currentPath].title + " | Eliswa India";
+      return <GenericPage title={pageContents[currentPath].title} content={pageContents[currentPath].content} />;
+    }
 
-content = content.replace(
-  "          <Hero />\n          <Collection />\n          <About />",
-  "          {currentPath === '/onam-sarees' ? (\n            <OnamSarees />\n          ) : (\n            <>\n              <Hero />\n              <Collection />\n              <About />\n            </>\n          )}"
-);
+    // Default home page
+    return (
+      <>
+        <Hero />
+        <Collection />
+        <About />
+      </>
+    );
+  };`;
+
+const importTarget = `import { BlogPost } from './components/BlogPost';`;
+const importReplacement = `import { BlogPost } from './components/BlogPost';\nimport { GenericPage } from './components/GenericPage';\nimport { pageContents } from './pages';`;
+
+content = content.replace(targetContent, replacementContent);
+content = content.replace(importTarget, importReplacement);
 
 fs.writeFileSync('src/App.tsx', content);
+console.log("App.tsx updated");

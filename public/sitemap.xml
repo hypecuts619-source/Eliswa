@@ -13,39 +13,51 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://eliswa.com/blogs/kerala-kasavu-saree-guide</loc>
+    <loc>https://eliswa.com/kasavu-sarees</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://eliswa.com/tissue-sarees</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://eliswa.com/about</loc>
     <lastmod>2026-07-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://eliswa.com/blogs/how-to-drape-style-kasavu-saree</loc>
+    <loc>https://eliswa.com/contact</loc>
     <lastmod>2026-07-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://eliswa.com/blogs/kasavu-saree-care-guide</loc>
+    <loc>https://eliswa.com/shipping-returns</loc>
     <lastmod>2026-07-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://eliswa.com/blogs/onam-sarees-2026-guide</loc>
+    <loc>https://eliswa.com/size-guide</loc>
     <lastmod>2026-07-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://eliswa.com/blogs/onam-saree-styling-ideas</loc>
+    <loc>https://eliswa.com/faq</loc>
     <lastmod>2026-07-06</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://eliswa.com/blogs/onam-kasavu-saree-white-gold-meaning</loc>
+    <loc>https://eliswa.com/journal</loc>
     <lastmod>2026-07-06</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 </urlset>

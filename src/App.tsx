@@ -16,6 +16,8 @@ import { CartDrawer } from './components/CartDrawer';
 import { OnamSarees } from './components/OnamSarees';
 import { Journal } from './components/Journal';
 import { BlogPost } from './components/BlogPost';
+import { GenericPage } from './components/GenericPage';
+import { pageContents } from './pages';
 
 export default function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
@@ -27,8 +29,22 @@ export default function App() {
   }, []);
 
   const renderContent = () => {
-    if (currentPath === '/onam-sarees') {
-      return <OnamSarees />;
+    if (currentPath === '/onam-sarees' || currentPath === '/kasavu-sarees' || currentPath === '/tissue-sarees') {
+      const titleMap: Record<string, string> = {
+        '/onam-sarees': 'Onam Sarees – Handwoven Kerala Kasavu Sarees for Thiruvonam',
+        '/kasavu-sarees': 'Kasavu Sarees – Traditional Off-White Cotton Sarees',
+        '/tissue-sarees': 'Tissue Sarees – Fine Metallic Tissue Weaves'
+      };
+      
+      // Update document title manually
+      document.title = titleMap[currentPath] + " | Eliswa India";
+
+      return (
+        <div className="pt-24 pb-16">
+          <h1 className="sr-only">{titleMap[currentPath]}</h1>
+          <Collection defaultCategory={currentPath === "/tissue-sarees" ? "Tissue" : currentPath === "/kasavu-sarees" ? "Cotton" : null} />
+        </div>
+      );
     }
     
     if (currentPath === '/journal') {
@@ -37,6 +53,12 @@ export default function App() {
     
     if (currentPath.startsWith('/blogs/')) {
       return <BlogPost slug={currentPath} />;
+    }
+
+    if (pageContents[currentPath]) {
+      // Update document title manually
+      document.title = pageContents[currentPath].title + " | Eliswa India";
+      return <GenericPage title={pageContents[currentPath].title} content={pageContents[currentPath].content} />;
     }
 
     // Default home page
