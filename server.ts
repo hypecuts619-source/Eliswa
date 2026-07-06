@@ -12,6 +12,7 @@ async function startServer() {
 
   app.get("/google15107b17e9305211.html", (req, res) => { res.send("google-site-verification: google15107b17e9305211.html"); });
   app.get("/sitemap.xml", (req, res) => { res.type("application/xml"); res.sendFile(path.join(process.cwd(), "public", "sitemap.xml")); });
+  app.get("/sitemap-blogs.xml", (req, res) => { res.type("application/xml"); res.sendFile(path.join(process.cwd(), "public", "sitemap-blogs.xml")); });
   // API Routes
   app.post("/api/stylist", async (req, res) => {
     try {
