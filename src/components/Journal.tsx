@@ -6,42 +6,42 @@ const blogPosts = [
     title: 'The Complete Guide to Kerala Kasavu Sarees',
     excerpt: 'Everything you need to know about Kerala Kasavu sarees — history, weaving, fabric types, and how to spot authentic handloom.',
     date: 'August 12, 2026',
-    image: '/kanchepuram_saree.png'
+    image: 'https://upload.wikimedia.org/wikipedia/commons/8/80/Saree_Weaving_by_Handloom.jpg'
   },
   {
     slug: '/blogs/how-to-drape-style-kasavu-saree',
     title: 'How to Drape and Style a Kasavu Saree',
     excerpt: 'A step-by-step guide to draping a Kasavu saree the traditional way, plus styling tips for jewelry, blouses, and hair.',
     date: 'August 15, 2026',
-    image: '/portrait.png'
+    image: 'https://upload.wikimedia.org/wikipedia/commons/1/1b/Malayali_women_wearing_Kerala_saree.jpg'
   },
   {
     slug: '/blogs/kasavu-saree-care-guide',
     title: 'Kasavu Saree Care Guide: Washing & Storing',
     excerpt: 'Learn how to wash, store, and preserve your Kasavu saree so the gold zari border and fabric stay beautiful for years.',
     date: 'August 18, 2026',
-    image: '/hero_img_a.png'
+    image: 'https://upload.wikimedia.org/wikipedia/commons/0/03/Set_saree.jpg'
   },
   {
     slug: '/blogs/onam-sarees-2026-guide',
     title: 'Onam Sarees 2026: The Ultimate Guide',
     excerpt: 'Choosing an Onam saree for 2026? Here is a complete guide to Kasavu, tissue, and set sarees for Thiruvonam.',
     date: 'August 21, 2026',
-    image: '/kanchepuram_saree.png'
+    image: 'https://upload.wikimedia.org/wikipedia/commons/d/d6/Onam_Thriuvathira_Dance.jpg'
   },
   {
     slug: '/blogs/onam-saree-styling-ideas',
     title: 'What to Wear for Onam: Styling Ideas',
     excerpt: 'From Athapookkalam mornings to Thiruvonam evenings, here is how to style your Kasavu saree for every event.',
     date: 'August 24, 2026',
-    image: '/portrait.png'
+    image: 'https://upload.wikimedia.org/wikipedia/commons/d/d5/Onam.saree.model.jpg'
   },
   {
     slug: '/blogs/onam-kasavu-saree-white-gold-meaning',
     title: 'Why Kerala Wears White and Gold for Onam',
     excerpt: 'The story behind Onam and the Kasavu saree — the legend of Mahabali, and the symbolism of white and gold.',
     date: 'August 27, 2026',
-    image: '/hero_img_a.png'
+    image: 'https://upload.wikimedia.org/wikipedia/commons/3/30/Onam_Pookalam_with_Nirapara.jpg'
   }
 ];
 
