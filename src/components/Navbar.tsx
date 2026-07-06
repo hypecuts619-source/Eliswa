@@ -65,8 +65,8 @@ export function Navbar() {
               <span className="absolute left-0 bottom-0 w-0 h-[1.5px] bg-[#cf958f]/60 transition-all group-hover:w-full"></span>
             </a>
             <span className="text-[#cf958f]/40 text-xs select-none">•</span>
-            <a href="#contact" className="hover:text-[#a86058] transition-colors relative group py-1">
-              Atelier Inquiries
+            <a href="/journal" className="hover:text-[#a86058] transition-colors relative group py-1">
+              The Editorial
               <span className="absolute left-0 bottom-0 w-0 h-[1.5px] bg-[#cf958f]/60 transition-all group-hover:w-full"></span>
             </a>
           </div>
@@ -118,7 +118,7 @@ export function Navbar() {
             { label: 'The Collection', href: '#collection' },
             { label: 'Our Story', href: '#about-us' },
             { label: 'Patrons', href: '#client-stories' },
-            { label: 'Atelier Inquiries', href: '#contact' }
+            { label: "The Editorial", href: '/journal' }
           ].map((item) => (
             <a 
               key={item.label} 

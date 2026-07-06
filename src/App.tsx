@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Collection } from './components/Collection';
@@ -14,11 +14,21 @@ import { WhatsAppButton } from './components/WhatsAppButton';
 import { BackToTop } from './components/BackToTop';
 import { CartProvider } from './context/CartContext';
 import { CartDrawer } from './components/CartDrawer';
+import { OnamSarees } from './components/OnamSarees';
 
 export default function App() {
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+
+  useEffect(() => {
+    const handleLocationChange = () => setCurrentPath(window.location.pathname);
+    window.addEventListener('popstate', handleLocationChange);
+    return () => window.removeEventListener('popstate', handleLocationChange);
+  }, []);
+
   return (
     <CartProvider>
       <main className="relative min-h-screen text-vintage font-body overflow-x-hidden selection:bg-rose selection:text-white bg-transparent">
+        {currentPath !== '/onam-sarees' && <h1 className="sr-only">Bespoke Kerala Kasavu & Onam Sarees, Handwoven for You</h1>}
         {/* 3D Cloth Waving Global Background */}
         <svg width="0" height="0" className="hidden absolute">
           <filter id="cloth-wave" x="-20%" y="-20%" width="140%" height="140%">
@@ -51,9 +61,15 @@ export default function App() {
         <div className="relative z-10">
           <Navbar />
           <CartDrawer />
-          <Hero />
-          <Collection />
-          <About />
+          {currentPath === '/onam-sarees' ? (
+            <OnamSarees />
+          ) : (
+            <>
+              <Hero />
+              <Collection />
+              <About />
+            </>
+          )}
           <Footer />
           <HeritageSoundtrack />
           <WhatsAppButton />
