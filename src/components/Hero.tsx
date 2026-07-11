@@ -52,8 +52,8 @@ const HERO_CHAPTERS: HeroChapter[] = [
 
 const CRAFT_CATEGORIES = [
   {
-    name: 'Kasavu Cotton',
-    desc: 'Traditional Ivory',
+    name: 'Feather',
+    desc: 'Lightweight & Breathable',
     material: 'Cotton',
     occasion: null,
     baseColor: '#FDFBF7',
@@ -62,8 +62,18 @@ const CRAFT_CATEGORIES = [
     crest: '⚜'
   },
   {
-    name: 'Metallic Tissue',
-    desc: 'Liquid Gold Weave',
+    name: 'Bloom',
+    desc: 'Floral & Festive',
+    material: null,
+    occasion: 'Festive',
+    baseColor: '#FDFBF7',
+    borderColor: '#8B0000',
+    accentColor: '#D4AF37',
+    crest: '✿'
+  },
+  {
+    name: 'Glow',
+    desc: 'Metallic Sheen',
     material: 'Tissue',
     occasion: null,
     baseColor: '#F8F0E3',
@@ -72,34 +82,14 @@ const CRAFT_CATEGORIES = [
     crest: '✧'
   },
   {
-    name: 'Mulberry Silk',
-    desc: 'Fine Royal Brocade',
-    material: 'Silk',
-    occasion: null,
-    baseColor: '#FDFBF7',
-    borderColor: '#D4AF37',
-    accentColor: '#008080',
-    crest: '✿'
-  },
-  {
-    name: 'Bridal drapes',
-    desc: 'Sacred Wedding Weaves',
+    name: 'Aura',
+    desc: 'Ethereal Bridal',
     material: null,
     occasion: 'Wedding',
     baseColor: '#FAF0E6',
     borderColor: '#B76E79',
     accentColor: '#C07C88',
     crest: '❦'
-  },
-  {
-    name: 'Festive Wear',
-    desc: 'Celebratory Classics',
-    material: null,
-    occasion: 'Festive',
-    baseColor: '#FDFBF7',
-    borderColor: '#8B0000',
-    accentColor: '#D4AF37',
-    crest: '✦'
   }
 ];
 
@@ -267,7 +257,7 @@ export function Hero() {
           </div>
 
           {/* Horizontal Craft Category Cards Row (Spacious & Perfectly Aligned!) */}
-          <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-5 gap-4 md:gap-6 lg:gap-8 justify-items-center">
+          <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-4 gap-4 md:gap-6 lg:gap-8 justify-items-center">
             {CRAFT_CATEGORIES.map((category, index) => (
               <motion.button
                 key={category.name}
