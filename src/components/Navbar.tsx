@@ -2,7 +2,7 @@ import { motion, useScroll } from 'framer-motion';
 import { Menu, X, ShoppingBag } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
-import eliswaLogo from '../assets/brand_logo.webp';
+import eliswaLogo from '../assets/eliswa_logo.png';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);

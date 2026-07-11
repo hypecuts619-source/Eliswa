@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { LegalModal } from './LegalModals';
 import { motion } from 'framer-motion';
-import eliswaIndia from '../assets/brand_india.webp';
+import eliswaIndia from '../assets/eliswa_india.png';
 
 export function Footer() {
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);

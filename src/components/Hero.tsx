@@ -54,6 +54,7 @@ const CRAFT_CATEGORIES = [
   {
     name: 'Feather',
     desc: 'Lightweight & Breathable',
+    imageUrl: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&q=80&w=400',
     material: 'Cotton',
     occasion: null,
     baseColor: '#FDFBF7',
@@ -64,6 +65,7 @@ const CRAFT_CATEGORIES = [
   {
     name: 'Bloom',
     desc: 'Floral & Festive',
+    imageUrl: 'https://images.unsplash.com/photo-1583391733958-d25e07fac04f?auto=format&fit=crop&q=80&w=400',
     material: null,
     occasion: 'Festive',
     baseColor: '#FDFBF7',
@@ -74,6 +76,7 @@ const CRAFT_CATEGORIES = [
   {
     name: 'Glow',
     desc: 'Metallic Sheen',
+    imageUrl: 'https://images.unsplash.com/photo-1605763240000-7e93b172d754?auto=format&fit=crop&q=80&w=400',
     material: 'Tissue',
     occasion: null,
     baseColor: '#F8F0E3',
@@ -84,6 +87,7 @@ const CRAFT_CATEGORIES = [
   {
     name: 'Aura',
     desc: 'Ethereal Bridal',
+    imageUrl: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=400',
     material: null,
     occasion: 'Wedding',
     baseColor: '#FAF0E6',
@@ -275,26 +279,28 @@ export function Hero() {
                 >
                   <div 
                     className="w-full h-full rounded-full flex flex-col items-center justify-center relative overflow-hidden"
-                    style={{
-                      background: `linear-gradient(135deg, ${category.baseColor} 0%, #FAF6EB 100%)`
-                    }}
                   >
-                    {/* Fine handloom thread mesh overlay */}
-                    <div className="absolute inset-0 opacity-10 pointer-events-none" style={{
-                      backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 2px, #4A1521 2px, #4A1521 4px)',
-                      backgroundSize: '8px 8px'
-                    }} />
-
-                    {/* Inner gold circular lace */}
-                    <div className="absolute inset-1 rounded-full border border-dashed border-vintage/15 group-hover:border-vintage/35 transition-colors duration-300" />
+                    {category.imageUrl ? (
+                      <img 
+                        src={category.imageUrl} 
+                        alt={category.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      <>
+                        <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 2px, #4A1521 2px, #4A1521 4px)', backgroundSize: '8px 8px' }} />
+                        <span className="text-base font-serif group-hover:scale-125 transition-transform duration-500 z-10 select-none" style={{ color: category.accentColor }}>
+                          {category.crest}
+                        </span>
+                      </>
+                    )}
                     
-                    {/* Centered Golden Crest */}
-                    <span className="text-base font-serif group-hover:scale-125 transition-transform duration-500 z-10 select-none" style={{ color: category.accentColor }}>
-                      {category.crest}
-                    </span>
-
+                    {/* Inner gold circular lace */}
+                    <div className="absolute inset-1 rounded-full border border-dashed border-white/40 group-hover:border-white/70 transition-colors duration-300 pointer-events-none z-20" />
+                    
                     {/* Golden luster swipe animation on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/45 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 z-20 pointer-events-none" />
                   </div>
                 </div>
 
