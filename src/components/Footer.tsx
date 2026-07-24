@@ -18,7 +18,7 @@ export function Footer() {
         
         {/* Symmetrical Footer Header in Logo Style */}
         <div className="flex flex-col items-center justify-center text-vintage select-none text-center mb-16">
-          <img src="/eliswa_india.png" alt="Eliswa India" className="h-32 md:h-48 object-contain -mt-4" />
+          <img src="/Eliswa%20India.png" alt="Eliswa India" className="h-32 md:h-48 object-contain -mt-4" />
           <span className="text-[10px] md:text-xs tracking-[0.4em] uppercase text-olive font-medium mt-2">
             You are rare
           </span>
