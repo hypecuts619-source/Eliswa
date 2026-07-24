@@ -2,7 +2,6 @@ import { motion, useScroll } from 'framer-motion';
 import { Menu, X, ShoppingBag } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
-import eliswaLogo from '../assets/eliswa_logo.png';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,7 +35,7 @@ export function Navbar() {
           
           {/* Left: Brand Branding in Logo Style */}
           <a href="#home" className="flex flex-col items-center justify-center select-none group/logo">
-            <img src={eliswaLogo} alt="EW Logo" className="h-16 md:h-20 transition-transform duration-300 group-hover/logo:scale-[1.02] object-contain" />
+            <img src="/eliswa_logo.png" alt="EW Logo" className="h-16 md:h-20 transition-transform duration-300 group-hover/logo:scale-[1.02] object-contain" />
           </a>
 
           {/* Center: Symmetrical Editorial Desktop Menu */}
@@ -109,7 +108,7 @@ export function Navbar() {
         transition={{ duration: 0.4, ease: "easeInOut" }}
       >
         <div className="border border-[#cf958f]/20 p-8 w-full max-w-md h-full max-h-[80vh] flex flex-col items-center justify-center space-y-8 relative">
-          <img src={eliswaLogo} alt="EW Logo" className="absolute top-5 h-16 object-contain" />
+          <img src="/eliswa_logo.png" alt="EW Logo" className="absolute top-5 h-16 object-contain" />
           
           <span className="text-[#cf958f]/40 text-2xl">❦</span>
           
