@@ -5,6 +5,7 @@
 import { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
+import { WeaveShowcase } from './components/WeaveShowcase';
 import { Collection } from './components/Collection';
 import { About } from './components/About';
 import { HeritageSoundtrack } from './components/HeritageSoundtrack';
@@ -65,6 +66,7 @@ export default function App() {
     return (
       <>
         <Hero />
+        <WeaveShowcase />
         <Collection />
         <About />
       </>
@@ -73,9 +75,10 @@ export default function App() {
 
   return (
     <CartProvider>
+      <a href="#main-content" className="skip-link">Skip to content</a>
       <main className="relative min-h-screen text-vintage font-body overflow-x-hidden selection:bg-rose selection:text-white bg-transparent">
         {currentPath !== '/onam-sarees' && <h1 className="sr-only">Bespoke Kerala Kasavu & Onam Sarees, Handwoven for You</h1>}
-        
+
         {/* 3D Cloth Waving Global Background */}
         <svg width="0" height="0" className="hidden absolute">
           <filter id="cloth-wave" x="-20%" y="-20%" width="140%" height="140%">
@@ -100,7 +103,7 @@ export default function App() {
         <div className="relative z-10">
           <Navbar />
           <CartDrawer />
-          {renderContent()}
+          <div id="main-content">{renderContent()}</div>
           <Footer />
           <HeritageSoundtrack />
           <WhatsAppButton />
