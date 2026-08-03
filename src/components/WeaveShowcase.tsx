@@ -15,7 +15,7 @@ class SceneBoundary extends Component<{ fallback: ReactNode; children: ReactNode
   }
 
   componentDidCatch(error: unknown) {
-    console.warn('Silk drape scene unavailable, falling back to the still image.', error);
+    console.warn('Loom scene unavailable, falling back to the still image.', error);
   }
 
   render() {
@@ -42,13 +42,13 @@ function supportsWebGL(): boolean {
 
 const CRAFT_NOTES = [
   { label: 'The Warp', copy: 'Unbleached cotton, tensioned by hand across the pit loom.' },
-  { label: 'The Zari', copy: 'Half-fine gold thread, wound onto the shuttle a metre at a time.' },
+  { label: 'The Weft', copy: 'Every coloured stripe is one pick — thrown by shuttle, beaten home.' },
   { label: 'The Pallu', copy: 'The signed end — where the weaver leaves their measure of the work.' },
 ];
 
 /**
- * The section that follows the hero: a live WebGL drape of kasavu silk that
- * folds, catches light and turns with the reader's pointer and scroll.
+ * The section that follows the hero: a live WebGL pit loom weaving an Onam
+ * kasavu, the cloth running off the breast beam into a hanging drape.
  *
  * It is deliberately cautious about when it runs — the scene is code-split, it
  * only mounts once the section nears the viewport, its render loop halts when
@@ -158,16 +158,16 @@ export function WeaveShowcase() {
             The Loom, In Motion
           </h2>
           <p className="font-display text-cream mt-4 max-w-2xl leading-[1.25] tracking-wide text-[clamp(1.6rem,1.1rem+2vw,3rem)]">
-            Six metres of cloth, <span className="italic rose-gold-metallic">still moving</span>
+            Made <span className="italic rose-gold-metallic">while you watch</span>
           </p>
           <p className="text-pearl/65 font-light mt-5 max-w-xl text-[clamp(0.9rem,0.85rem+0.3vw,1.05rem)] leading-relaxed">
-            Handloom kasavu never lies flat. It gathers, catches light along the zari, and
-            settles differently each time it is draped — which is exactly the point.
+            Six metres of Onam kasavu, a pick at a time. The olive, rose and lilac stripes
+            arrive one thrown shuttle at a time, and the cloth grows as you watch.
           </p>
         </motion.div>
 
         {/* --- The drape --- */}
-        <div className="relative h-[52vh] min-h-[300px] max-h-[600px] sm:h-[58vh] -mt-2">
+        <div className="relative h-[58vh] min-h-[340px] max-h-[660px] sm:h-[64vh] -mt-2">
           {showCanvas ? (
             <SceneBoundary fallback={<DrapeFallback />}>
               <Suspense fallback={<DrapeFallback />}>

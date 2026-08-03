@@ -43,19 +43,19 @@ const Z_HEDDLE = -5.10;    // back of the warp
 
 const BED_LEN = Z_BEAM - Z_FELL;              // taut section
 const CURVE_LEN = (Math.PI / 2) * BEAM_R;     // over the beam
-const HANG_LEN = 2.45;                        // falls past the bottom of frame
+const HANG_LEN = 3.30;                        // deliberately runs past the bottom of frame
 const TOTAL_LEN = BED_LEN + CURVE_LEN + HANG_LEN;
 
 /** One weft pick per this many seconds. */
 const PICK_PERIOD = 1.5;
 /** How far the cloth advances per pick. */
-const PICK_ADVANCE = 0.014;
+const PICK_ADVANCE = 0.05;
 /** Distance between pallu bands along the cloth. */
 const PALLU_REPEAT = 6.4;
 /** Distance between repeats of the body stripe group. */
 const STRIPE_PERIOD = 0.46;
 
-const ARRANGEMENT = { width: 6.6, height: 4.4 };
+const ARRANGEMENT = { width: 6.2, height: 3.75 };
 
 /* -------------------------------------------------------------------------- */
 /*  The cloth                                                                  */
@@ -64,6 +64,8 @@ const ARRANGEMENT = { width: 6.6, height: 4.4 };
 const CLOTH_VERTEX = /* glsl */ `
   uniform float uWeave;
   uniform float uFoldAmp;
+  uniform float uTime;
+  uniform float uBeatAge;   // seconds since the reed last beat
 
   varying vec2  vUv;
   varying vec3  vNormal;
@@ -117,6 +119,18 @@ const CLOTH_VERTEX = /* glsl */ `
     // Displace along the surface normal, which rotates with the path.
     vec3 normal = vec3(0.0, cos(angle), sin(angle));
     pos += normal * folds(x, uvIn.y * TOTAL_LEN + uWeave, hang);
+
+    // Free cloth is never still. It swings slowly from the beam, further the
+    // lower it hangs, and each beat of the reed sends a shudder down it.
+    float free = smoothstep(0.0, 1.6, hang);
+    pos.z += sin(uTime * 0.85 + hang * 0.30) * 0.052 * free;
+    pos.x += sin(uTime * 0.61 + hang * 0.22 + 1.7) * 0.028 * free;
+
+    float travelled = uBeatAge * 3.1;          // the impulse runs down the cloth
+    float gap = hang - travelled;
+    float shudder = exp(-gap * gap * 5.0) * exp(-uBeatAge * 2.4);
+    pos.z += shudder * 0.085 * step(0.001, hang);
+
     return pos;
   }
 
@@ -320,6 +334,8 @@ interface Choreography {
   shuttleVisible: number;
   reedZ: number;
   weave: number;
+  /** Seconds since the reed last drove a weft home. */
+  beatAge: number;
 }
 
 /** Where every moving part should be at time `t`. One pick per PICK_PERIOD. */
@@ -346,7 +362,12 @@ function choreograph(t: number): Choreography {
   // Cloth steps forward on each beat rather than creeping continuously.
   const weave = (index + smoothstep(0.82, 0.96, phase)) * PICK_ADVANCE;
 
-  return { shed: open * direction, shuttleX, shuttleVisible, reedZ, weave };
+  // How long ago the reed struck, for the shudder that runs down the cloth.
+  let sinceBeat = phase - 0.88;
+  if (sinceBeat < 0) sinceBeat += 1;
+  const beatAge = sinceBeat * PICK_PERIOD;
+
+  return { shed: open * direction, shuttleX, shuttleVisible, reedZ, weave, beatAge };
 }
 
 function clamp(v: number, lo: number, hi: number) {
@@ -403,6 +424,8 @@ function Loom({
       uniforms: {
         uWeave: { value: 0 },
         uFoldAmp: { value: 0.30 },
+        uTime: { value: 0 },
+        uBeatAge: { value: 0 },
         uCloth: { value: new THREE.Color(PALETTE.cream) },
         uClothAlt: { value: new THREE.Color(PALETTE.pearl) },
         uOlive: { value: new THREE.Color(PALETTE.oliveLight) },
@@ -418,8 +441,8 @@ function Loom({
   }, []);
 
   const warp = useMemo(() => {
-    const COUNT = 84;
-    const half = 0.011;
+    const COUNT = 52;
+    const half = 0.0085;
     const positions: number[] = [];
     const parity: number[] = [];
     const alongT: number[] = [];
@@ -483,6 +506,8 @@ function Loom({
     const c = choreograph(state.clock.elapsedTime);
 
     cloth.material.uniforms.uWeave.value = c.weave;
+    cloth.material.uniforms.uTime.value = state.clock.elapsedTime;
+    cloth.material.uniforms.uBeatAge.value = c.beatAge;
     warp.material.uniforms.uShed.value = c.shed;
 
     if (shuttleRef.current) {
