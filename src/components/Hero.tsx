@@ -174,12 +174,14 @@ export function Hero() {
             exit={{ opacity: 0, scale: 0.99 }}
             transition={{ duration: 0.8, ease: 'easeInOut' }}
           >
-            <motion.img 
+            <motion.img
               src={active.imageUrl}
               alt={active.title}
               style={{ y }}
               className="w-full h-[130%] absolute -top-[15%] object-cover brightness-[0.93] contrast-[1.02] group-hover:scale-105 transition-transform duration-10000 ease-out"
               referrerPolicy="no-referrer"
+              decoding="async"
+              fetchPriority={currentChapter === 0 ? 'high' : 'auto'}
             />
           </motion.div>
         </AnimatePresence>
@@ -281,11 +283,13 @@ export function Hero() {
                     className="w-full h-full rounded-full flex flex-col items-center justify-center relative overflow-hidden"
                   >
                     {category.imageUrl ? (
-                      <img 
-                        src={category.imageUrl} 
+                      <img
+                        src={category.imageUrl}
                         alt={category.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                         referrerPolicy="no-referrer"
+                        loading="lazy"
+                        decoding="async"
                       />
                     ) : (
                       <>

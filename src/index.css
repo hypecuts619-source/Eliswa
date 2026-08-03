@@ -2,20 +2,51 @@
 @import "tailwindcss";
 
 @theme {
+  /* ---- Brand palette (unchanged) ---- */
   --color-cream: #FAF6EB;
   --color-rose: #C1838F;
   --color-vintage: #4A1521;
   --color-pearl: #F5EBE6;
   --color-olive: #5E6032;
-  
+
+  /* Rose-gold accents already used inline throughout the site, promoted to
+     tokens so they stay consistent. Same values, no new hues. */
+  --color-rosegold: #cf958f;
+  --color-rosegold-deep: #a86058;
+  --color-rosegold-light: #f2d5d1;
+
   --font-display: "Playfair Display", serif;
   --font-body: "Montserrat", sans-serif;
   --font-logo-ew: "Pinyon Script", cursive;
   --font-logo-text: "Playfair Display", serif;
+
+  /* ---- Fluid type scale: sizes track the viewport instead of snapping ---- */
+  --text-fluid-xs: clamp(0.65rem, 0.6rem + 0.2vw, 0.75rem);
+  --text-fluid-sm: clamp(0.8rem, 0.75rem + 0.25vw, 0.95rem);
+  --text-fluid-base: clamp(0.95rem, 0.9rem + 0.3vw, 1.125rem);
+  --text-fluid-lg: clamp(1.35rem, 1.1rem + 1.1vw, 2rem);
+  --text-fluid-xl: clamp(1.9rem, 1.3rem + 2.6vw, 3.5rem);
+  --text-fluid-2xl: clamp(2.4rem, 1.5rem + 4vw, 5rem);
+
+  /* ---- Depth: warm, tinted shadows rather than neutral black ---- */
+  --shadow-soft: 0 1px 2px rgb(74 21 33 / 0.04), 0 8px 24px -12px rgb(74 21 33 / 0.12);
+  --shadow-lifted: 0 2px 4px rgb(74 21 33 / 0.05), 0 18px 44px -18px rgb(74 21 33 / 0.20);
+  --shadow-float: 0 4px 8px rgb(74 21 33 / 0.06), 0 34px 70px -24px rgb(74 21 33 / 0.26);
+
+  /* ---- Motion ---- */
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-drape: cubic-bezier(0.65, 0, 0.35, 1);
 }
+
+/* ------------------------------------------------------------------ */
+/*  Base                                                               */
+/* ------------------------------------------------------------------ */
 
 html {
   scroll-behavior: smooth;
+  /* Keep anchored sections clear of the fixed navbar. */
+  scroll-padding-top: 7rem;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -23,7 +54,55 @@ body {
   background-color: #FAF6EB;
   color: #4A1521;
   overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-synthesis-weight: none;
 }
+
+/* Visible, on-brand focus ring for keyboard users — invisible to mouse users. */
+:focus-visible {
+  outline: 2px solid var(--color-rosegold-deep);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--color-rose);
+  color: #fff;
+}
+
+/* Slim scrollbar tinted to the palette. */
+@supports (scrollbar-width: thin) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(193 131 143 / 0.55) transparent;
+  }
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(193 131 143 / 0.45);
+  border: 3px solid #FAF6EB;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(193 131 143 / 0.7);
+}
+
+img {
+  /* Nothing ever renders with a broken aspect ratio while loading. */
+  max-width: 100%;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Utilities                                                          */
+/* ------------------------------------------------------------------ */
 
 .rose-gold-metallic {
   background: linear-gradient(
@@ -41,6 +120,107 @@ body {
   display: inline-block;
 }
 
+/* Frosted editorial surface — used by the navbar, chips and floating controls. */
+.surface-glass {
+  background: color-mix(in srgb, var(--color-cream) 88%, transparent);
+  backdrop-filter: blur(14px) saturate(1.15);
+  -webkit-backdrop-filter: blur(14px) saturate(1.15);
+  border: 1px solid rgb(74 21 33 / 0.12);
+}
+
+/* Hairline rule that fades out at both ends. */
+.hairline {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgb(74 21 33 / 0.18) 15%,
+    rgb(74 21 33 / 0.18) 85%,
+    transparent
+  );
+}
+
+/* Gold-thread underline that draws in on hover. */
+.link-zari {
+  position: relative;
+}
+.link-zari::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1.5px;
+  background: linear-gradient(to right, var(--color-rosegold), var(--color-rosegold-deep));
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s var(--ease-editorial);
+}
+.link-zari:hover::after,
+.link-zari:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* A slow sheen sweeping across a surface, like light over silk. */
+@keyframes zari-sheen {
+  0%   { transform: translateX(-120%) skewX(-12deg); }
+  100% { transform: translateX(220%) skewX(-12deg); }
+}
+.sheen-sweep::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgb(255 255 255 / 0.45) 50%,
+    transparent 80%
+  );
+  animation: zari-sheen 6s var(--ease-drape) infinite;
+  pointer-events: none;
+}
+
+/* Scroll-reveal primitive, driven by the `.is-revealed` class. */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.9s var(--ease-editorial),
+    transform 0.9s var(--ease-editorial);
+  will-change: opacity, transform;
+}
+.reveal.is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* Skip link — visually hidden until focused. */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 50%;
+  transform: translate(-50%, -200%);
+  z-index: 100;
+  padding: 0.65rem 1.5rem;
+  background: var(--color-cream);
+  color: var(--color-vintage);
+  border: 1px solid rgb(74 21 33 / 0.2);
+  border-radius: 999px;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  box-shadow: var(--shadow-lifted);
+  transition: transform 0.3s var(--ease-editorial);
+}
+.skip-link:focus-visible {
+  transform: translate(-50%, 0);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Animated cloth backdrop                                            */
+/* ------------------------------------------------------------------ */
+
 @keyframes saree-color-flow {
   0% { background-position: 0% 0%; }
   100% { background-position: 200% 200%; }
@@ -53,13 +233,13 @@ body {
 
 .bg-cloth-3d {
   /* Pastel Saree colors */
-  background: 
+  background:
     linear-gradient(
-      135deg, 
-      #fff0f3 0%, 
-      #fdf6e3 25%, 
-      #fae8ed 50%, 
-      #fef9e7 75%, 
+      135deg,
+      #fff0f3 0%,
+      #fdf6e3 25%,
+      #fae8ed 50%,
+      #fef9e7 75%,
       #fff0f3 100%
     );
   background-size: 300% 300%;
@@ -71,7 +251,7 @@ body {
   position: absolute;
   inset: 0;
   /* Shadow and highlight waves moving diagonally */
-  background: 
+  background:
     repeating-linear-gradient(
       135deg,
       rgba(255, 255, 255, 0) 0%,
@@ -94,3 +274,27 @@ body {
   pointer-events: none;
 }
 
+/* ------------------------------------------------------------------ */
+/*  Reduced motion                                                     */
+/* ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Revealed content must never be left invisible when motion is off. */
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

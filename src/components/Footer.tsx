@@ -18,8 +18,17 @@ export function Footer() {
         
         {/* Symmetrical Footer Header in Logo Style */}
         <div className="flex flex-col items-center justify-center text-vintage select-none text-center mb-16">
-          <img src="/eliswa_india.png" alt="Eliswa India" className="h-32 md:h-48 object-contain -mt-4" />
-          <span className="text-[10px] md:text-xs tracking-[0.4em] uppercase text-olive font-medium mt-2">
+          <img
+            src="/eliswa_india.png"
+            alt="Eliswa India"
+            width={777}
+            height={316}
+            loading="lazy"
+            decoding="async"
+            className="h-24 sm:h-32 md:h-40 w-auto object-contain"
+          />
+          <div className="hairline w-32 mt-6" />
+          <span className="text-[10px] md:text-xs tracking-[0.4em] uppercase text-olive font-medium mt-4">
             You are rare
           </span>
         </div>
