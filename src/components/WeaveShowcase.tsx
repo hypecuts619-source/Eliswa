@@ -1,7 +1,7 @@
 import { Component, Suspense, lazy, useEffect, useRef, useState, type ReactNode } from 'react';
 import { motion, useReducedMotion, useScroll, useMotionValueEvent } from 'framer-motion';
 
-const SilkDrapeScene = lazy(() => import('./three/SilkDrapeScene'));
+const LoomWeaveScene = lazy(() => import('./three/LoomWeaveScene'));
 
 /**
  * Keeps a failed chunk download or a refused WebGL context local to this
@@ -171,7 +171,7 @@ export function WeaveShowcase() {
           {showCanvas ? (
             <SceneBoundary fallback={<DrapeFallback />}>
               <Suspense fallback={<DrapeFallback />}>
-                <SilkDrapeScene
+                <LoomWeaveScene
                   progressRef={progressRef}
                   active={active}
                   animate={!prefersReducedMotion}
