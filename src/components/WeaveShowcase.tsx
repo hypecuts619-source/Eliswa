@@ -119,12 +119,12 @@ export function WeaveShowcase() {
       aria-labelledby="the-loom-heading"
       className="relative w-full overflow-hidden isolate"
       style={{
-        // A deep band of the house's own vintage maroon, warmed toward rose at
-        // the top. Nothing outside the existing palette — but dark enough that
-        // cream cloth and coloured stripes finally have something to read against.
-        backgroundColor: '#4A1521',
+        // The palette's pearl, a shade deeper than the page cream so the
+        // off-white cloth still separates from its background, with a warm
+        // vignette behind the loom so the machine does not look pasted on.
+        backgroundColor: '#F5EBE6',
         backgroundImage:
-          'radial-gradient(130% 105% at 50% -10%, color-mix(in srgb, #4A1521 78%, #C1838F) 0%, #4A1521 58%, #3d1119 100%)',
+          'radial-gradient(115% 95% at 50% 62%, color-mix(in srgb, #F5EBE6 88%, #C1838F) 0%, #F5EBE6 52%, #FAF6EB 100%)',
       }}
     >
       {/* Cream feathering top and bottom so the band joins the page. */}
@@ -148,19 +148,19 @@ export function WeaveShowcase() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="flex flex-col items-center text-center select-none"
         >
-          <span className="text-rosegold/60 text-xl mb-2" aria-hidden="true">
+          <span className="text-vintage/30 text-xl mb-2" aria-hidden="true">
             ✧
           </span>
           <h2
             id="the-loom-heading"
-            className="font-display text-[10px] sm:text-xs tracking-[0.35em] uppercase text-rosegold font-semibold"
+            className="font-display text-[10px] sm:text-xs tracking-[0.35em] uppercase text-olive font-semibold"
           >
             The Loom, In Motion
           </h2>
-          <p className="font-display text-cream mt-4 max-w-2xl leading-[1.25] tracking-wide text-[clamp(1.6rem,1.1rem+2vw,3rem)]">
+          <p className="font-display text-vintage mt-4 max-w-2xl leading-[1.25] tracking-wide text-[clamp(1.6rem,1.1rem+2vw,3rem)]">
             Made <span className="italic rose-gold-metallic">while you watch</span>
           </p>
-          <p className="text-pearl/65 font-light mt-5 max-w-xl text-[clamp(0.9rem,0.85rem+0.3vw,1.05rem)] leading-relaxed">
+          <p className="text-vintage/70 font-light mt-5 max-w-xl text-[clamp(0.9rem,0.85rem+0.3vw,1.05rem)] leading-relaxed">
             Six metres of Onam kasavu, a pick at a time. Every olive, rose and lilac stripe
             is a single thrown shuttle, and the cloth never once hangs still.
           </p>
@@ -184,7 +184,7 @@ export function WeaveShowcase() {
         </div>
 
         {/* --- Craft notes --- */}
-        <div className="relative grid gap-px sm:grid-cols-3 bg-pearl/12 border border-pearl/12 rounded-sm overflow-hidden backdrop-blur-sm">
+        <div className="relative grid gap-px sm:grid-cols-3 bg-vintage/10 border border-vintage/10 rounded-sm overflow-hidden backdrop-blur-sm">
           {CRAFT_NOTES.map((note, index) => (
             <motion.div
               key={note.label}
@@ -192,12 +192,12 @@ export function WeaveShowcase() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="px-6 py-7 text-center sm:text-left bg-vintage/45"
+              className="px-6 py-7 text-center sm:text-left bg-cream/85"
             >
-              <span className="block text-[10px] tracking-[0.28em] uppercase font-bold text-rosegold">
+              <span className="block text-[10px] tracking-[0.28em] uppercase font-bold text-olive">
                 {note.label}
               </span>
-              <p className="mt-2.5 text-pearl/70 font-light text-sm leading-relaxed">
+              <p className="mt-2.5 text-vintage/75 font-light text-sm leading-relaxed">
                 {note.copy}
               </p>
             </motion.div>
@@ -213,7 +213,7 @@ function DrapeFallback() {
   return (
     <div aria-hidden="true" className="absolute inset-0 flex items-center justify-center">
       <div
-        className="w-[88%] h-[58%] rounded-[45%_45%_42%_42%/14%_14%_12%_12%] shadow-[0_34px_80px_-20px_rgb(0_0_0/0.45)]"
+        className="w-[88%] h-[58%] rounded-[45%_45%_42%_42%/14%_14%_12%_12%] shadow-[0_34px_80px_-24px_rgb(74_21_33/0.30)]"
         style={{
           background:
             'linear-gradient(102deg, #F5EBE6 0%, #FAF6EB 26%, #f2d5d1 46%, #FAF6EB 66%, #F5EBE6 100%)',
