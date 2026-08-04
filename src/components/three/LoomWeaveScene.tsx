@@ -23,10 +23,18 @@ const PALETTE = {
   zari: '#cf958f',
   zariDeep: '#a86058',
   zariLight: '#f2d5d1',
+
+  // Taken from the Onam kasavu this scene reproduces. `oliveLight` and
+  // `roseLight` are the existing olive and rose tokens lifted toward cream,
+  // which is how they read woven as fine stripes on an off-white ground.
+  // `lilac` is the one hue the site palette does not already contain.
+  oliveLight: '#8b9459',
+  roseLight: '#d79aa8',
+  lilac: '#8e7cb5',
 };
 
 // ---- Loom geometry, in world units -----------------------------------------
-const CLOTH_WIDTH = 2.0;
+const CLOTH_WIDTH = 2.35;
 const Z_FELL = -1.70;      // where new cloth is formed
 const Z_BEAM = 0.55;       // breast beam, where cloth turns downward
 const Y_BED = 0.62;        // height of the loom bed
@@ -35,17 +43,19 @@ const Z_HEDDLE = -5.10;    // back of the warp
 
 const BED_LEN = Z_BEAM - Z_FELL;              // taut section
 const CURVE_LEN = (Math.PI / 2) * BEAM_R;     // over the beam
-const HANG_LEN = 2.45;                        // falls past the bottom of frame
+const HANG_LEN = 3.30;                        // deliberately runs past the bottom of frame
 const TOTAL_LEN = BED_LEN + CURVE_LEN + HANG_LEN;
 
 /** One weft pick per this many seconds. */
 const PICK_PERIOD = 1.5;
 /** How far the cloth advances per pick. */
-const PICK_ADVANCE = 0.014;
+const PICK_ADVANCE = 0.05;
 /** Distance between pallu bands along the cloth. */
 const PALLU_REPEAT = 6.4;
+/** Distance between repeats of the body stripe group. */
+const STRIPE_PERIOD = 0.46;
 
-const ARRANGEMENT = { width: 6.6, height: 4.4 };
+const ARRANGEMENT = { width: 6.2, height: 3.75 };
 
 /* -------------------------------------------------------------------------- */
 /*  The cloth                                                                  */
@@ -54,6 +64,8 @@ const ARRANGEMENT = { width: 6.6, height: 4.4 };
 const CLOTH_VERTEX = /* glsl */ `
   uniform float uWeave;
   uniform float uFoldAmp;
+  uniform float uTime;
+  uniform float uBeatAge;   // seconds since the reed last beat
 
   varying vec2  vUv;
   varying vec3  vNormal;
@@ -107,6 +119,18 @@ const CLOTH_VERTEX = /* glsl */ `
     // Displace along the surface normal, which rotates with the path.
     vec3 normal = vec3(0.0, cos(angle), sin(angle));
     pos += normal * folds(x, uvIn.y * TOTAL_LEN + uWeave, hang);
+
+    // Free cloth is never still. It swings slowly from the beam, further the
+    // lower it hangs, and each beat of the reed sends a shudder down it.
+    float free = smoothstep(0.0, 1.6, hang);
+    pos.z += sin(uTime * 0.85 + hang * 0.30) * 0.052 * free;
+    pos.x += sin(uTime * 0.61 + hang * 0.22 + 1.7) * 0.028 * free;
+
+    float travelled = uBeatAge * 3.1;          // the impulse runs down the cloth
+    float gap = hang - travelled;
+    float shudder = exp(-gap * gap * 5.0) * exp(-uBeatAge * 2.4);
+    pos.z += shudder * 0.085 * step(0.001, hang);
+
     return pos;
   }
 
@@ -136,8 +160,9 @@ const CLOTH_VERTEX = /* glsl */ `
 const CLOTH_FRAGMENT = /* glsl */ `
   uniform vec3  uCloth;
   uniform vec3  uClothAlt;
-  uniform vec3  uZari;
-  uniform vec3  uZariDeep;
+  uniform vec3  uOlive;
+  uniform vec3  uRose;
+  uniform vec3  uLilac;
   uniform vec3  uShade;
   uniform vec3  uRim;
   uniform float uWeave;
@@ -149,7 +174,25 @@ const CLOTH_FRAGMENT = /* glsl */ `
   varying float vAlongCloth;
   varying float vOnLoom;
 
-  const float PALLU_REPEAT = ${PALLU_REPEAT.toFixed(4)};
+  const float PALLU_REPEAT   = ${PALLU_REPEAT.toFixed(4)};
+  const float STRIPE_PERIOD  = ${STRIPE_PERIOD.toFixed(4)};
+
+  // A soft-edged line centred on \`c\`, half-width \`w\`.
+  float band(float x, float c, float w) {
+    return 1.0 - smoothstep(w, w * 1.8, abs(x - c));
+  }
+
+  // The same, but on a 0..1 coordinate that wraps.
+  float bandWrapped(float x, float c, float w) {
+    float d = abs(x - c);
+    d = min(d, 1.0 - d);
+    return 1.0 - smoothstep(w, w * 1.8, d);
+  }
+
+  // A filled band from \`lo\` to \`hi\` with soft shoulders.
+  float bandRange(float x, float lo, float hi, float soft) {
+    return smoothstep(lo - soft, lo + soft, x) * (1.0 - smoothstep(hi - soft, hi + soft, x));
+  }
 
   void main() {
     vec3 N = normalize(vNormal);
@@ -161,21 +204,50 @@ const CLOTH_FRAGMENT = /* glsl */ `
 
     vec3 col = mix(uCloth, uClothAlt, smoothstep(0.0, 1.0, vUv.x));
 
-    // ---- Kasavu zari -------------------------------------------------
-    // Selvedge bands down both edges, a hairline inside each, and a pallu
-    // band recurring along the length as each saree is finished.
-    float edge      = min(vUv.x, 1.0 - vUv.x);
-    float selvedge  = 1.0 - smoothstep(0.052, 0.066, edge);
-    float pinstripe = 1.0 - smoothstep(0.0035, 0.0065, abs(edge - 0.094));
+    // ---- The Onam kasavu ----------------------------------------------
+    // Off-white ground, fine weft stripes in olive / rose / lilac, a striped
+    // selvedge down each edge, and a pallu with its cross-border at intervals.
 
-    float palluPos  = mod(vAlongCloth, PALLU_REPEAT);
-    float pallu     = smoothstep(0.30, 0.34, palluPos) * (1.0 - smoothstep(0.86, 0.90, palluPos));
-    float palluLine = 1.0 - smoothstep(0.008, 0.014, abs(palluPos - 1.06));
+    float edge = min(vUv.x, 1.0 - vUv.x);
 
-    float zariMask = clamp(selvedge + pinstripe * 0.85 + pallu * 0.9 + palluLine * 0.8, 0.0, 1.0);
+    // Where we are within the current saree, and within its pallu.
+    float palluPos = mod(vAlongCloth, PALLU_REPEAT);
+    float inPallu  = smoothstep(-0.01, 0.01, palluPos) * (1.0 - smoothstep(0.60, 0.63, palluPos));
 
-    float threads = 0.5 + 0.3 * sin(vAlongCloth * 42.0) + 0.2 * sin(vUv.x * 46.0);
-    col = mix(col, mix(uZariDeep, uZari, clamp(threads, 0.0, 1.0)), zariMask);
+    // Body stripes: each is a single coloured pick, so they appear as woven.
+    float sp = mod(vAlongCloth, STRIPE_PERIOD) / STRIPE_PERIOD;
+    float body = 1.0 - inPallu;
+    col = mix(col, uLilac, bandWrapped(sp, 0.06, 0.017) * body);
+    col = mix(col, uOlive, bandWrapped(sp, 0.32, 0.020) * body);
+    col = mix(col, uRose,  bandWrapped(sp, 0.56, 0.018) * body);
+    col = mix(col, uOlive, bandWrapped(sp, 0.80, 0.014) * body);
+
+    // Selvedge: a lilac band with olive and rose lines just inside it.
+    float selLilac = 1.0 - smoothstep(0.026, 0.032, edge);
+    float selOlive = band(edge, 0.040, 0.0055);
+    float selRose  = band(edge, 0.056, 0.0045);
+    col = mix(col, uLilac, selLilac);
+    col = mix(col, uOlive, selOlive);
+    col = mix(col, uRose,  selRose);
+
+    // Pallu cross-border: the same three colours, laid across the full width.
+    float cbLilac = bandRange(palluPos, 0.000, 0.042, 0.006);
+    float cbOlive = bandRange(palluPos, 0.052, 0.078, 0.005);
+    float cbRose  = bandRange(palluPos, 0.086, 0.108, 0.005);
+    // …and repeated at the far end of the pallu, before the fringe.
+    float ceRose  = bandRange(palluPos, 0.500, 0.522, 0.005);
+    float ceOlive = bandRange(palluPos, 0.530, 0.556, 0.005);
+    float ceLilac = bandRange(palluPos, 0.566, 0.608, 0.006);
+
+    col = mix(col, uLilac, max(cbLilac, ceLilac));
+    col = mix(col, uOlive, max(cbOlive, ceOlive));
+    col = mix(col, uRose,  max(cbRose, ceRose));
+
+    float borderMask = clamp(
+      selLilac + selOlive + selRose + cbLilac + cbOlive + cbRose
+        + ceRose + ceOlive + ceLilac,
+      0.0, 1.0
+    );
 
     // ---- Weave texture ------------------------------------------------
     float warp  = 0.5 + 0.5 * sin(vUv.x * 190.0);
@@ -186,7 +258,7 @@ const CLOTH_FRAGMENT = /* glsl */ `
     float diffuse  = max(dot(N, key), 0.0);
     float fillTerm = max(dot(N, fill), 0.0) * 0.20;
     vec3  h        = normalize(key + V);
-    float specular = pow(max(dot(N, h), 0.0), 48.0) * (0.22 + zariMask * 1.05)
+    float specular = pow(max(dot(N, h), 0.0), 46.0) * (0.18 + borderMask * 0.22)
                    * (0.86 + weave * 0.28);
 
     float occlusion = 1.0 - clamp(-vFold * 0.62, 0.0, 0.55);
@@ -262,6 +334,8 @@ interface Choreography {
   shuttleVisible: number;
   reedZ: number;
   weave: number;
+  /** Seconds since the reed last drove a weft home. */
+  beatAge: number;
 }
 
 /** Where every moving part should be at time `t`. One pick per PICK_PERIOD. */
@@ -288,7 +362,12 @@ function choreograph(t: number): Choreography {
   // Cloth steps forward on each beat rather than creeping continuously.
   const weave = (index + smoothstep(0.82, 0.96, phase)) * PICK_ADVANCE;
 
-  return { shed: open * direction, shuttleX, shuttleVisible, reedZ, weave };
+  // How long ago the reed struck, for the shudder that runs down the cloth.
+  let sinceBeat = phase - 0.88;
+  if (sinceBeat < 0) sinceBeat += 1;
+  const beatAge = sinceBeat * PICK_PERIOD;
+
+  return { shed: open * direction, shuttleX, shuttleVisible, reedZ, weave, beatAge };
 }
 
 function clamp(v: number, lo: number, hi: number) {
@@ -312,7 +391,7 @@ export default function LoomWeaveScene({ progressRef, active, animate }: LoomWea
       frameloop={!animate ? 'demand' : active ? 'always' : 'never'}
       dpr={[1, 1.75]}
       gl={{ alpha: true, antialias: true, powerPreference: 'high-performance' }}
-      camera={{ position: [4.35, 1.30, 4.55], fov: 42 }}
+      camera={{ position: [4.55, 1.45, 4.30], fov: 42 }}
       style={{ pointerEvents: 'none' }}
     >
       <Loom progressRef={progressRef} interactive={animate} />
@@ -334,7 +413,7 @@ function Loom({
   const { viewport, camera } = useThree();
 
   useLayoutEffect(() => {
-    camera.lookAt(-0.55, -0.42, -1.25);
+    camera.lookAt(-0.10, -0.34, -2.05);
   }, [camera]);
 
   const cloth = useMemo(() => {
@@ -345,10 +424,13 @@ function Loom({
       uniforms: {
         uWeave: { value: 0 },
         uFoldAmp: { value: 0.30 },
+        uTime: { value: 0 },
+        uBeatAge: { value: 0 },
         uCloth: { value: new THREE.Color(PALETTE.cream) },
         uClothAlt: { value: new THREE.Color(PALETTE.pearl) },
-        uZari: { value: new THREE.Color(PALETTE.zari) },
-        uZariDeep: { value: new THREE.Color(PALETTE.zariDeep) },
+        uOlive: { value: new THREE.Color(PALETTE.oliveLight) },
+        uRose: { value: new THREE.Color(PALETTE.roseLight) },
+        uLilac: { value: new THREE.Color(PALETTE.lilac) },
         uShade: { value: new THREE.Color(PALETTE.vintage) },
         uRim: { value: new THREE.Color(PALETTE.zariLight) },
       },
@@ -359,8 +441,8 @@ function Loom({
   }, []);
 
   const warp = useMemo(() => {
-    const COUNT = 84;
-    const half = 0.011;
+    const COUNT = 52;
+    const half = 0.0085;
     const positions: number[] = [];
     const parity: number[] = [];
     const alongT: number[] = [];
@@ -424,6 +506,8 @@ function Loom({
     const c = choreograph(state.clock.elapsedTime);
 
     cloth.material.uniforms.uWeave.value = c.weave;
+    cloth.material.uniforms.uTime.value = state.clock.elapsedTime;
+    cloth.material.uniforms.uBeatAge.value = c.beatAge;
     warp.material.uniforms.uShed.value = c.shed;
 
     if (shuttleRef.current) {
