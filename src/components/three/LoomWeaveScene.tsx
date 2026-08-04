@@ -11,7 +11,7 @@ import * as THREE from 'three';
  * are made. Above the fell line the warp opens and closes its shed, a shuttle
  * flies through, and the reed beats the weft home.
  *
- * Every colour is a site palette token. Nothing new enters the brand.
+ * Lit for the pale pearl band it sits on: high ambient, shadow-read form.
  */
 
 const PALETTE = {
@@ -261,20 +261,24 @@ const CLOTH_FRAGMENT = /* glsl */ `
     float specular = pow(max(dot(N, h), 0.0), 46.0) * (0.18 + borderMask * 0.22)
                    * (0.86 + weave * 0.28);
 
-    float occlusion = 1.0 - clamp(-vFold * 0.62, 0.0, 0.55);
-    col *= (0.17 + diffuse * 0.88 + fillTerm) * occlusion;
-    col  = mix(col, uShade, clamp(-vFold * 0.50, 0.0, 0.48));
+    // Lit for a pale ground: high ambient, and the form read from the depth
+    // of its own fold shadows rather than from glowing against darkness.
+    float occlusion = 1.0 - clamp(-vFold * 0.78, 0.0, 0.62);
+    col *= (0.60 + diffuse * 0.44 + fillTerm) * occlusion;
+    col  = mix(col, uShade, clamp(-vFold * 0.34, 0.0, 0.34));
     col += specular;
 
-    float rim = pow(1.0 - max(dot(N, V), 0.0), 3.0);
-    col += uRim * rim * 0.30;
+    // A soft darkening at grazing angles separates the silhouette from the
+    // background — the inverse of the rim light a dark stage would want.
+    float grazing = pow(1.0 - max(dot(N, V), 0.0), 3.2);
+    col = mix(col, uShade, grazing * 0.16);
 
     // Cloth on the loom bed catches the overhead light more directly.
-    col += vOnLoom * 0.06;
+    col += vOnLoom * 0.035;
 
-    // The freshly-beaten edge glows faintly, so the eye finds the fell line.
+    // The freshly-beaten edge sits a touch brighter, so the eye finds the fell line.
     float freshness = 1.0 - smoothstep(0.0, 0.14, vUv.y);
-    col += uRim * freshness * 0.10;
+    col += freshness * 0.035;
 
     gl_FragColor = vec4(col, 1.0);
 
@@ -318,10 +322,10 @@ const WARP_FRAGMENT = /* glsl */ `
 
   void main() {
     vec3 col = mix(uColor, uColorAlt, vParity * 0.35);
-    // Threads fade into the dark toward the back of the loom.
+    // Threads recede toward the back of the loom. On a pale ground they thin
+    // out by losing opacity rather than by darkening.
     float depth = smoothstep(0.0, 0.85, vT);
-    col *= 0.35 + depth * 0.75;
-    gl_FragColor = vec4(col, 0.55 + depth * 0.45);
+    gl_FragColor = vec4(col, 0.28 + depth * 0.55);
     #include <colorspace_fragment>
   }
 `;
@@ -478,8 +482,8 @@ function Loom({
       uniforms: {
         uShed: { value: 0 },
         uShedAmp: { value: 0.26 },
-        uColor: { value: new THREE.Color(PALETTE.cream) },
-        uColorAlt: { value: new THREE.Color(PALETTE.zariLight) },
+        uColor: { value: new THREE.Color(PALETTE.rose) },
+        uColorAlt: { value: new THREE.Color(PALETTE.zariDeep) },
       },
     });
 
@@ -638,7 +642,7 @@ function ZariDust({ count = 70 }: { count?: number }) {
       transparent: true,
       depthWrite: false,
       uniforms: {
-        uColor: { value: new THREE.Color(PALETTE.zariLight) },
+        uColor: { value: new THREE.Color(PALETTE.zariDeep) },
         uPixelRatio: { value: 1 },
       },
       vertexShader: /* glsl */ `
@@ -656,7 +660,7 @@ function ZariDust({ count = 70 }: { count?: number }) {
         varying float vFade;
         void main() {
           float d = length(gl_PointCoord - 0.5);
-          float alpha = (1.0 - smoothstep(0.18, 0.5, d)) * 0.6 * vFade;
+          float alpha = (1.0 - smoothstep(0.18, 0.5, d)) * 0.28 * vFade;
           if (alpha < 0.01) discard;
           gl_FragColor = vec4(uColor, alpha);
           #include <colorspace_fragment>
