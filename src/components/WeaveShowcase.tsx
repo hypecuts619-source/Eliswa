@@ -121,7 +121,7 @@ export function WeaveShowcase() {
       style={{
         // A deep band of the house's own vintage maroon, warmed toward rose at
         // the top. Nothing outside the existing palette — but dark enough that
-        // cream silk and gold zari finally have something to read against.
+        // cream cloth and coloured stripes finally have something to read against.
         backgroundColor: '#4A1521',
         backgroundImage:
           'radial-gradient(130% 105% at 50% -10%, color-mix(in srgb, #4A1521 78%, #C1838F) 0%, #4A1521 58%, #3d1119 100%)',
@@ -161,8 +161,8 @@ export function WeaveShowcase() {
             Made <span className="italic rose-gold-metallic">while you watch</span>
           </p>
           <p className="text-pearl/65 font-light mt-5 max-w-xl text-[clamp(0.9rem,0.85rem+0.3vw,1.05rem)] leading-relaxed">
-            Six metres of Onam kasavu, a pick at a time. The olive, rose and lilac stripes
-            arrive one thrown shuttle at a time, and the cloth grows as you watch.
+            Six metres of Onam kasavu, a pick at a time. Every olive, rose and lilac stripe
+            is a single thrown shuttle, and the cloth never once hangs still.
           </p>
         </motion.div>
 
