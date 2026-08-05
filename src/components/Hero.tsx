@@ -2,52 +2,44 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, Sparkles, Compass, ChevronLeft, ChevronRight } from 'lucide-react';
 
-interface HeroChapter {
+interface HeroSlide {
   id: string;
-  chapterNumber: string;
-  title: string;
-  tagline: string;
-  poeticCopy: string;
   imageUrl: string;
-  crest: string;
-  accent: string;
-  vintageFact: string;
+  /** Described for screen readers only — never shown over the image. */
+  alt: string;
 }
 
-const HERO_CHAPTERS: HeroChapter[] = [
+/**
+ * The campaign slideshow. Files live in `public/hero/`; a slide whose image
+ * fails to load is dropped from the rotation rather than shown blank, so a
+ * missing or misnamed file degrades instead of breaking the hero.
+ */
+const HERO_SLIDES: HeroSlide[] = [
   {
-    id: 'kerala',
-    chapterNumber: 'Chapter I',
-    title: 'Kerala Traditional Saree',
-    tagline: 'Pure ivory and gold Kasavu weaving',
-    poeticCopy: 'Traditional handloom of Kerala, spun from fine cotton with pure golden zari borders.',
-    imageUrl: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&q=80&w=1600',
-    crest: '⚜',
-    accent: 'Kerala Kasavu Saree',
-    vintageFact: 'Traditional Ivory & Gold'
+    id: 'petals',
+    imageUrl: '/hero/hero-01.jpg',
+    alt: 'Seated in a cream Onam kasavu with a green and pink checked border, gathering flower petals into a brass urli.',
   },
   {
-    id: 'kanchepuram',
-    chapterNumber: 'Chapter II',
-    title: 'Kanchepuram Silk Saree',
-    tagline: 'Royal silk threads of South Indian heritage',
-    poeticCopy: 'A magnificent Kanjivaram double-warp silk masterpiece cast with lustrous temple borders.',
-    imageUrl: '/kanchepuram_saree.png',
-    crest: '✿',
-    accent: 'Kanchepuram Silk Saree',
-    vintageFact: 'Double-Woven Silk'
+    id: 'swing',
+    imageUrl: '/hero/hero-02.jpg',
+    alt: 'Two Onam kasavu sarees seen from behind on a wooden swing, one striped and one checked, their pallus spread across the seat.',
   },
   {
-    id: 'banaras',
-    chapterNumber: 'Chapter III',
-    title: 'Banaras Silk Saree',
-    tagline: 'Opulent gold brocades from holy banks',
-    poeticCopy: 'A breath-taking heritage red Banarasi silk woven with intricate floral jaal zari patterns.',
-    imageUrl: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&q=80&w=1600',
-    crest: '❦',
-    accent: 'Banaras Silk Saree',
-    vintageFact: 'Fine Zari Brocade'
-  }
+    id: 'corridor',
+    imageUrl: '/hero/hero-03.jpg',
+    alt: 'Two women in cream Onam kasavu sarees facing one another in a lamplit corridor.',
+  },
+  {
+    id: 'verandah',
+    imageUrl: '/hero/hero-04.jpg',
+    alt: 'Two cream Onam kasavu sarees with checked borders and floral motifs, in a pillared verandah.',
+  },
+  {
+    id: 'portrait',
+    imageUrl: '/hero/hero-05.jpg',
+    alt: 'A cream Onam kasavu with fine stripes and a violet border, worn on a verandah overlooking the water.',
+  },
 ];
 
 const CRAFT_CATEGORIES = [
@@ -100,6 +92,7 @@ const CRAFT_CATEGORIES = [
 export function Hero() {
   const [currentChapter, setCurrentChapter] = useState(0);
   const [isManual, setIsManual] = useState(false);
+  const [brokenIds, setBrokenIds] = useState<string[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -109,23 +102,32 @@ export function Hero() {
 
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
 
+  // Any slide whose file is missing drops out of the rotation. If every one
+  // fails — the images have not been uploaded yet — the banner falls back to a
+  // plain cloth wash instead of a carousel of broken images.
+  const slides = HERO_SLIDES.filter((slide) => !brokenIds.includes(slide.id));
+  const hasImages = slides.length > 0;
+
   // Auto-slide effect every 8.5 seconds unless manually controlled
   useEffect(() => {
     if (isManual) return;
+    if (slides.length < 2) return;
     const interval = setInterval(() => {
-      setCurrentChapter((prev) => (prev + 1) % HERO_CHAPTERS.length);
+      setCurrentChapter((prev) => (prev + 1) % slides.length);
     }, 8500);
     return () => clearInterval(interval);
-  }, [isManual]);
+  }, [isManual, slides.length]);
 
   const handleNext = () => {
+    if (!hasImages) return;
     setIsManual(true);
-    setCurrentChapter((prev) => (prev + 1) % HERO_CHAPTERS.length);
+    setCurrentChapter((prev) => (prev + 1) % slides.length);
   };
 
   const handlePrev = () => {
+    if (!hasImages) return;
     setIsManual(true);
-    setCurrentChapter((prev) => (prev - 1 + HERO_CHAPTERS.length) % HERO_CHAPTERS.length);
+    setCurrentChapter((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
   const handleChapterSelect = (index: number) => {
@@ -133,7 +135,7 @@ export function Hero() {
     setCurrentChapter(index);
   };
 
-  const active = HERO_CHAPTERS[currentChapter];
+  const active = hasImages ? slides[currentChapter % slides.length] : undefined;
 
   const showWeaveAndCraft = true; // Set to true to unhide the 'Shop by Weave & Craft' section later
 
@@ -165,48 +167,55 @@ export function Hero() {
       >
         
         {/* Large Campaign Slideshow */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={active.id}
+        {hasImages ? (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={active.id}
+              className="absolute inset-0 w-full h-full"
+              initial={{ opacity: 0, scale: 1.02 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.99 }}
+              transition={{ duration: 0.8, ease: 'easeInOut' }}
+            >
+              <motion.img
+                src={active.imageUrl}
+                alt={active.alt}
+                style={{ y }}
+                className="w-full h-[130%] absolute -top-[15%] object-cover brightness-[0.97] contrast-[1.01] group-hover:scale-105 transition-transform duration-10000 ease-out"
+                decoding="async"
+                fetchPriority={currentChapter === 0 ? 'high' : 'auto'}
+                onError={() =>
+                  setBrokenIds((ids) => (ids.includes(active.id) ? ids : [...ids, active.id]))
+                }
+              />
+            </motion.div>
+          </AnimatePresence>
+        ) : (
+          /* Every slide failed to load — show the house's own cloth rather than
+             a row of broken images. */
+          <div
             className="absolute inset-0 w-full h-full"
-            initial={{ opacity: 0, scale: 1.02 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.99 }}
-            transition={{ duration: 0.8, ease: 'easeInOut' }}
-          >
-            <motion.img
-              src={active.imageUrl}
-              alt={active.title}
-              style={{ y }}
-              className="w-full h-[130%] absolute -top-[15%] object-cover brightness-[0.93] contrast-[1.02] group-hover:scale-105 transition-transform duration-10000 ease-out"
-              referrerPolicy="no-referrer"
-              decoding="async"
-              fetchPriority={currentChapter === 0 ? 'high' : 'auto'}
-            />
-          </motion.div>
-        </AnimatePresence>
+            style={{
+              background:
+                'linear-gradient(112deg, #FAF6EB 0%, #F5EBE6 34%, #f2d5d1 52%, #F5EBE6 70%, #FAF6EB 100%)',
+            }}
+          />
+        )}
 
         {/* Cinematic subtle gradients & framing lines (very light and non-intrusive) */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10 pointer-events-none z-10" />
-        <div className="absolute inset-4 sm:inset-6 border border-white/10 pointer-events-none rounded-xs z-10 transition-all duration-300 group-hover:border-white/20" />
-
-        {/* Minimal indicator at the bottom to show the name of the Saree Type being showcased */}
-        <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 text-center pointer-events-none">
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={`name-${active.id}`}
-              className="text-white text-xs sm:text-sm font-semibold tracking-[0.3em] uppercase drop-shadow-md"
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -5 }}
-              transition={{ duration: 0.4 }}
-            >
-              {active.title}
-            </motion.p>
-          </AnimatePresence>
-        </div>
+        {hasImages && (
+          <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/5 pointer-events-none z-10" />
+        )}
+        <div
+          className={`absolute inset-4 sm:inset-6 border pointer-events-none rounded-xs z-10 transition-all duration-300 ${
+            hasImages
+              ? 'border-white/10 group-hover:border-white/20'
+              : 'border-vintage/10 group-hover:border-vintage/20'
+          }`}
+        />
 
         {/* Elegant Slider Arrow Controls */}
+        {hasImages && (<>
         <button 
           onClick={(e) => {
             e.stopPropagation();
@@ -228,23 +237,27 @@ export function Hero() {
         >
           <ChevronRight size={18} />
         </button>
+        </>)}
 
         {/* Slide Chapter Indicators at bottom of banner */}
+        {slides.length > 1 && (
         <div 
           onClick={(e) => e.stopPropagation()}
           className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 bg-cream/95 backdrop-blur-md border border-vintage/15 px-5 py-2.5 rounded-full shadow-md"
         >
           <div className="flex items-center gap-2">
-            {HERO_CHAPTERS.map((chapter, index) => (
+            {slides.map((slide, index) => (
               <button
-                key={chapter.id}
+                key={slide.id}
                 onClick={() => handleChapterSelect(index)}
                 className={`w-2 h-2 rounded-full transition-all duration-300 ${currentChapter === index ? 'bg-vintage scale-110 w-5' : 'bg-vintage/25 hover:bg-vintage/50'}`}
                 aria-label={`Go to slide ${index + 1}`}
+                aria-current={currentChapter === index}
               />
             ))}
           </div>
         </div>
+        )}
       </div>
 
 
